@@ -119,6 +119,32 @@ public class StringUtils {
         FileUtils.writeFile(FileConstant.USER_DEFAULT_PATH + UD_FILE_NAME, jsonObject.toJSONString(), true);
     }
 
+    /**
+     * 去掉字符串指定的前缀
+     * @param str 字符串名称
+     * @param prefix 前缀数组
+     * @return
+     */
+    public static String removePrefix(String str, String[] prefix) {
+        if (Objects.isNull(str) || str.length() == 0) {
+            return "";
+        } else {
+            if (null != prefix) {
+                String[] prefixArray = prefix;
+
+                for(int i = 0; i < prefix.length; ++i) {
+                    String pf = prefixArray[i];
+                    if (str.toLowerCase().matches("^" + pf.toLowerCase() + ".*")) {
+                        //截取前缀后面的字符串
+                        return str.substring(pf.length());
+                    }
+                }
+            }
+
+            return str;
+        }
+    }
+
     public static String loadRecordString(String key) {
         if (Objects.isNull(key)) { return ""; }
 

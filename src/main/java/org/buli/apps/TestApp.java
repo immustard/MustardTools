@@ -10,15 +10,6 @@ public class TestApp {
 
     public static void main(String[] args) throws Exception {
 
-        String idx = StringUtils.loadRecordString("idx");
-
-        int i = StringUtils.parseInt(idx);
-
-        log.info(i);
-
-        i += 6;
-
-        StringUtils.recordString("idx", i+"");
 
 
     }
