@@ -43,16 +43,17 @@ public class KafkaProducerApp {
         int kafkaIdx = StringUtils.parseInt(StringUtils.loadRecordString(KAFKA_IDX_KEY));
 
         int idx = 1;
-//        String[] type = new String[] {"tbox","someip","track","udp","can"};
-        String[] type = new String[] {"tbox", "someip", "track", "can"};
-        String jsonStr = FileUtils.readFile("E:\\download\\ssh\\ods_ibmcos_message_cgw.json");
-        while (idx <= NumberConstant.THOUSAND) {
+        String[] type = new String[] {"tbox","someip","track","udp","can"};
+//        String[] type = new String[] {"tbox", "someip", "track", "can"};
+        String jsonStr = FileUtils.readFile("C:\\Users\\musta\\Desktop\\seatunnel_no_prefix\\ods_ibmcos_message_tbox.json");
+        while (idx <= NumberConstant.TEN_THOUSAND) {
             kafkaIdx++;
 
             JSONObject jsonObject = JSON.parseObject(jsonStr);
 //            jsonObject.put("vid", kafkaIdx+"");
 //            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("MessageType", type[idx%type.length]);
+//            jsonObject.put("MessageType", type[idx%type.length]);
+            jsonObject.put("MessageType", "can");
             jsonObject.put("vin",kafkaIdx+"");
             jsonObject.put("collectTime", DateUtils.formatDateTime(new Date()));
             jsonObject.put("pDate", date);
