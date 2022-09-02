@@ -24,7 +24,7 @@ public class KafkaProducerApp {
     public static void main(String[] args) throws Exception {
         String servers = "10.133.2.145:9092,10.133.2.146:9092,10.133.2.147:9092";
         // ods-tbox-seatunnel
-        String topic = "seatunnel-source-ibmcos";
+        String topic = "seatunnel-source-ibmcos-concat-test";
 
         checkTopic(servers, topic);
         sendMessage(servers, topic);
@@ -45,18 +45,48 @@ public class KafkaProducerApp {
         int idx = 1;
         String[] type = new String[] {"tbox","someip","track","udp","can"};
 //        String[] type = new String[] {"tbox", "someip", "track", "can"};
-        String jsonStr = FileUtils.readFile("C:\\Users\\musta\\Desktop\\seatunnel_no_prefix\\ods_ibmcos_message_tbox.json");
-        while (idx <= NumberConstant.TEN_THOUSAND) {
+
+        String tbox = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_tbox.json");
+        String someip = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_someip.json");
+        String track = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_had.json");
+        String udp = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_udp.json");
+        String can = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_can.json");
+
+        String jsonStr = null;
+
+        while (idx <= NumberConstant.HUNDRED) {
             kafkaIdx++;
+
+            String msgType = type[idx%type.length];
+            switch (msgType) {
+                case "tbox":
+                    jsonStr = tbox;
+                    break;
+                case "someip":
+                    jsonStr = someip;
+                    break;
+                case "track":
+                    jsonStr = track;
+                    break;
+                case "udp":
+                    jsonStr = udp;
+                    break;
+                case "can":
+                    jsonStr = can;
+                    break;
+                default:
+                    log.error("error type");
+                    return;
+            }
 
             JSONObject jsonObject = JSON.parseObject(jsonStr);
 //            jsonObject.put("vid", kafkaIdx+"");
 //            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("MessageType", type[idx%type.length]);
-            jsonObject.put("MessageType", "can");
+            jsonObject.put("MessageType", type[idx%type.length]);
+//            jsonObject.put("MessageType", "can");
             jsonObject.put("vin",kafkaIdx+"");
             jsonObject.put("collectTime", DateUtils.formatDateTime(new Date()));
-            jsonObject.put("pDate", date);
+            jsonObject.put("pdate", date);
 
             String s = JSON.toJSONString(jsonObject);
             KafkaUtils.sendAsyncMessage(producer, topic, s, true);
