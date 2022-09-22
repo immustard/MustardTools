@@ -6,10 +6,45 @@ import org.buli.utils.file.FileConstant;
 import org.buli.utils.file.FileUtils;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
-    final static private String UD_FILE_NAME = "UserDefault.txt";
+    /**
+     * 判断是否为空
+     */
+    public static boolean isEmpty(String str) {
+        if (Objects.isNull(str) || str.length() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否为空(去空格)
+     */
+    public static boolean isEmptyWithoutBlank(String str) {
+        return isEmpty(replaceBlank(str));
+    }
+
+    public static String replaceBlank(String str) {
+        if(isEmpty(str)){
+            return "";
+        }
+
+        Pattern p = Pattern.compile("\\s*|\t|\r|\n|&nbsp;");
+        Matcher m = p.matcher(str);
+        return m.replaceAll("");
+    }
+
+    public static String convert2String(Object obj) {
+        if (Objects.isNull(obj)) {
+            return "";
+        }
+
+        return obj.toString();
+    }
 
     /**
      * 大写第一个字母
@@ -100,26 +135,6 @@ public class StringUtils {
     }
 
     /**
-     * 持久化字符串
-     */
-    public static void recordString(String key, String value) throws Exception {
-        if (Objects.isNull(key)) { return; }
-
-        String path = FileConstant.USER_DEFAULT_PATH + UD_FILE_NAME;
-
-        String content = FileUtils.readFile(path);
-        JSONObject jsonObject = JSON.parseObject(content);
-
-        if (Objects.isNull(jsonObject)) {
-            jsonObject = new JSONObject();
-        }
-
-        jsonObject.put(key, value);
-
-        FileUtils.writeFile(FileConstant.USER_DEFAULT_PATH + UD_FILE_NAME, jsonObject.toJSONString(), true);
-    }
-
-    /**
      * 去掉字符串指定的前缀
      * @param str 字符串名称
      * @param prefix 前缀数组
@@ -145,17 +160,6 @@ public class StringUtils {
         }
     }
 
-    public static String loadRecordString(String key) {
-        if (Objects.isNull(key)) { return ""; }
-
-        String path = FileConstant.USER_DEFAULT_PATH + UD_FILE_NAME;
-
-        String content = FileUtils.readFile(path);
-        JSONObject jsonObject = JSON.parseObject(content);
-
-        return null == jsonObject ? "" : jsonObject.getString(key);
-    }
-
     public static int parseInt(String str) {
         if (Objects.isNull(str) || str.length() == 0) {
             return 0;
@@ -166,6 +170,26 @@ public class StringUtils {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    public static long parseLong(String str) {
+        if (Objects.isNull(str) || str.length() == 0) {
+            return 0L;
+        }
+
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
+    }
+
+    public static boolean parseBoolean(String str) {
+        if (Objects.isNull(str) || str.length() == 0) {
+            return false;
+        }
+
+        return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("yes");
     }
 
     private static char p_upperChar(char c) {

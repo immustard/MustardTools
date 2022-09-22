@@ -2,7 +2,6 @@ package org.buli.apps;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.lang3.time.StopWatch;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,7 @@ public class KafkaProducerApp {
     public static void main(String[] args) throws Exception {
         String servers = "10.133.2.145:9092,10.133.2.146:9092,10.133.2.147:9092";
         // ods-tbox-seatunnel
-        String topic = "seatunnel-source-ibmcos-concat-test";
+        String topic = "seatunnel-source-ibmcos-concat-someip";
 
         checkTopic(servers, topic);
         sendMessage(servers, topic);
@@ -40,13 +39,13 @@ public class KafkaProducerApp {
         String date = DateUtils.formatDate(new Date());
 
         String KAFKA_IDX_KEY = "kafka_idx";
-        int kafkaIdx = StringUtils.parseInt(StringUtils.loadRecordString(KAFKA_IDX_KEY));
+        int kafkaIdx = StringUtils.parseInt(UserDefaultUtils.getInstance().loadRecordString(KAFKA_IDX_KEY));
 
         int idx = 1;
         String[] type = new String[] {"tbox","someip","track","udp","can"};
 //        String[] type = new String[] {"tbox", "someip", "track", "can"};
 
-        String tbox = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_tbox.json");
+        String tbox = FileUtils.readFile("/Users/mustard/Downloads/seatunnel_concat/ods_ibmcos_message_tbox.json");
         String someip = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_someip.json");
         String track = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_had.json");
         String udp = FileUtils.readFile("/Users/mustard/Downloads/seatunnel/ods_ibmcos_message_udp.json");
@@ -54,10 +53,11 @@ public class KafkaProducerApp {
 
         String jsonStr = null;
 
-        while (idx <= NumberConstant.HUNDRED) {
+        while (idx <= NumberConstant.ONE) {
             kafkaIdx++;
 
-            String msgType = type[idx%type.length];
+//            String msgType = type[idx%type.length];
+            String msgType = "tbox";
             switch (msgType) {
                 case "tbox":
                     jsonStr = tbox;
@@ -94,7 +94,7 @@ public class KafkaProducerApp {
             idx++;
         }
 
-        StringUtils.recordString(KAFKA_IDX_KEY, kafkaIdx+"");
+        UserDefaultUtils.getInstance().recordString(KAFKA_IDX_KEY, kafkaIdx+"");
 
         producer.close();
 
