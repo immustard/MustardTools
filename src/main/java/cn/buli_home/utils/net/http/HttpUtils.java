@@ -25,6 +25,9 @@ public class HttpUtils {
     private static final MediaType MEDIA_TYPE_GENERAL = MediaType.parse("application/octet-stream");
     private static final MediaType MEDIA_TYPE_IMAGE = MediaType.parse("image/png");
 
+    /**
+     * 发送http请求
+     */
     public static HttpResponse request(HttpRequest httpRequest) {
         try {
             Request request = p_generateRequest(httpRequest);

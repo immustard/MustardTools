@@ -48,10 +48,19 @@ public class CommonFileUtils {
         }
     }
 
+    /**
+     * 生成txt文件名 (默认有日期)
+     *
+     * @param name      文件名
+     * @param canExtend 如果重名是否拓展
+     */
     public static String generateHandleFileName(String name, boolean canExtend) {
         return generateHandleFileName(name, true, canExtend);
     }
 
+    /**
+     * 文件夹是否存在
+     */
     public static boolean existsFolder(String path) {
         if (Objects.isNull(path)) {
             return false;
@@ -62,6 +71,9 @@ public class CommonFileUtils {
         return (folder.exists() && folder.isDirectory());
     }
 
+    /**
+     * 文件是否存在
+     */
     public static boolean existsFile(String path) {
         if (Objects.isNull(path)) {
             return false;
@@ -72,6 +84,9 @@ public class CommonFileUtils {
         return (file.exists() && !file.isDirectory());
     }
 
+    /**
+     * 创建文件夹
+     */
     public static boolean createFolder(String path) {
         if (Objects.isNull(path)) {
             return false;
@@ -88,6 +103,11 @@ public class CommonFileUtils {
         return true;
     }
 
+    /**
+     * 创建文件
+     * @param path 文件地址
+     * @param overwrite 是否覆盖
+     */
     public static boolean createFile(String path, boolean overwrite) throws IOException {
         if (Objects.isNull(path)) {
             return false;

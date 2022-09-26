@@ -1,6 +1,7 @@
 package cn.buli_home.utils.net.http;
 
 import cn.buli_home.utils.common.StringUtils;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -31,6 +32,11 @@ public class HttpRequest {
 
     private Map<String, String> bodyParameter;
 
+    /**
+     * 添加请求头 (键值对)
+     * @param key 键
+     * @param value 值
+     */
     public void addHeader(String key, String value) {
         if (Objects.isNull(header)) {
             header = new HashMap<>();
@@ -39,10 +45,34 @@ public class HttpRequest {
         header.put(key, value);
     }
 
+    /**
+     * 添加请求头 (字典)
+     * @param jsonObject 字典
+     */
+    public void addHeader(JSONObject jsonObject) {
+        if (Objects.isNull(jsonObject)) {
+            return;
+        }
+
+        for (String key : jsonObject.keySet()) {
+            String value = jsonObject.getString(key);
+
+            addHeader(key, value);
+        }
+    }
+
+    /**
+     * 是否有请求头
+     */
     public boolean hasHeader() {
         return Objects.nonNull(header) && !header.isEmpty();
     }
 
+    /**
+     * 添加查询参数 (键值对)
+     * @param key 键
+     * @param value 值
+     */
     public void addQueryParameter(String key, String value) {
         if (Objects.isNull(queryParameter)) {
             queryParameter = new HashMap<>();
@@ -51,10 +81,34 @@ public class HttpRequest {
         queryParameter.put(key, value);
     }
 
+    /**
+     * 添加查询参数 (字典)
+     * @param jsonObject 字典
+     */
+    public void addQueryParameter(JSONObject jsonObject) {
+        if (Objects.isNull(jsonObject)) {
+            return;
+        }
+
+        for (String key : jsonObject.keySet()) {
+            String value = jsonObject.getString(key);
+
+            addQueryParameter(key, value);
+        }
+    }
+
+    /**
+     * 是否有查询参数
+     */
     public boolean hasQueryParameter() {
         return Objects.nonNull(queryParameter) && !queryParameter.isEmpty();
     }
 
+    /**
+     * 添加请求体 (键值对)
+     * @param key 键
+     * @param value 值
+     */
     public void addBodyParameter(String key, String value) {
         if (Objects.isNull(bodyParameter)) {
             bodyParameter = new HashMap<>();
@@ -63,6 +117,25 @@ public class HttpRequest {
         bodyParameter.put(key, value);
     }
 
+    /**
+     * 添加请求体 (字典)
+     * @param jsonObject 字典
+     */
+    public void addBodyParameter(JSONObject jsonObject) {
+        if (Objects.isNull(jsonObject)) {
+            return;
+        }
+
+        for (String key : jsonObject.keySet()) {
+            String value = jsonObject.getString(key);
+
+            addBodyParameter(key, value);
+        }
+    }
+
+    /**
+     * 是否有请求体
+     */
     public boolean hasBodyParameter() {
         return Objects.nonNull(bodyParameter) && !bodyParameter.isEmpty();
     }

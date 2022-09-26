@@ -1,9 +1,9 @@
 package cn.buli_home.utils.file;
 
-public interface FileConstant {
+public final class FileConstant {
 
-    String RESULT_PATH_PREFIX = "E:\\Temp\\HandleFiles\\";
+    public static String RESULT_PATH_PREFIX = "E:\\Temp\\HandleFiles\\";
 
-    String USER_DEFAULT_PATH = "/Users/mustard/Workspace/Temp/UD/";
+    public static String USER_DEFAULT_PATH = "/Users/mustard/Workspace/Temp/UD/";
 
 }

@@ -15,6 +15,9 @@ import java.util.List;
 
 public class FileUtils {
 
+    /**
+     * 按行读取文件
+     */
     public static List<Tuple2<Integer, String>> readFileByLine(File file) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -35,6 +38,12 @@ public class FileUtils {
         return resultList;
     }
 
+    /**
+     * 写入内容到指定文件
+     * @param path 文件路径
+     * @param content 写入内容
+     * @param overwrite 是否覆盖
+     */
     public static void writeFile(String path, String content, boolean overwrite) throws Exception {
         Path oPath = Paths.get(path);
         boolean exists = Files.exists(oPath);
@@ -59,6 +68,9 @@ public class FileUtils {
         stream.close();
     }
 
+    /**
+     * 读取文件内容
+     */
     public static String readFile(String path) {
         boolean exists = CommonFileUtils.existsFile(path);
         if (!exists) { return ""; }

@@ -29,28 +29,46 @@ public class UserDefaultUtils {
 
     private String PATH = UD_FILE_PATH + UD_FILE_NAME;
 
-
+    /**
+     * 记录内容
+     */
     public static void recordString(String key, String value) throws Exception {
         getInstance().p_recordString(key, value);
     }
 
+    /**
+     * 记录内容
+     */
     public static void record(Map<String, String> map) throws Exception {
         getInstance().p_record(map);
     }
 
-
+    /**
+     * 读取文件内容
+     */
     public static String loadRecordString(String key) {
         return getInstance().p_loadRecordString(key);
     }
 
+    /**
+     * 设置文件路径
+     * @param filePath
+     */
     public static void setFilePath(String filePath) {
         getInstance().p_setFilePath(filePath);
     }
 
+    /**
+     * 清除键值对
+     * @param key 键
+     */
     public static void clean(String key) {
         getInstance().p_clean(key);
     }
 
+    /**
+     * 清除所有值
+     */
     public static void cleanAll() {
         getInstance().p_cleanAll();
     }

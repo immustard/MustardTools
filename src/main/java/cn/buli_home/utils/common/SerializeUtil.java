@@ -10,6 +10,9 @@ public class SerializeUtil {
 
     private SerializeUtil() {}
 
+    /**
+     * 序列化对象
+     */
     public static byte[] serializeObject(Object obj) {
         ObjectOutputStream objOS = null;
         ByteArrayOutputStream byteArrOS = null;
@@ -29,6 +32,9 @@ public class SerializeUtil {
         }
     }
 
+    /**
+     * 反序列化对象
+     */
     public static Object deserializeObject(byte[] buffer) {
         Object obj = null;
         ByteArrayInputStream byteArrIS = new ByteArrayInputStream(buffer);
