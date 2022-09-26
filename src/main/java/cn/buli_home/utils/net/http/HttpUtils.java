@@ -19,7 +19,8 @@ public class HttpUtils {
 
     private static final Logger log = LogManager.getLogger(HttpUtils.class);
 
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static OkHttpClient httpClient = new OkHttpClient.Builder()
+            .build();
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_GENERAL = MediaType.parse("application/octet-stream");
@@ -36,6 +37,18 @@ public class HttpUtils {
         } catch (Exception e) {
             return p_errorResponse(httpRequest, e);
         }
+    }
+
+    /**
+     * 添加拦截器
+     */
+    public static void addInterceptor(Interceptor... interceptors) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        for (Interceptor interceptor : interceptors) {
+            builder.addInterceptor(interceptor);
+        }
+        httpClient = builder.build();
     }
 
     // 请求底层方法
@@ -76,6 +89,7 @@ public class HttpUtils {
 
         httpResponse.setHttpRequest(httpRequest);
         httpResponse.setCode(response.code());
+        httpResponse.setSuccess(response.code()/100 == 2);
 
         try {
             String string = StringUtils.convert2String(response.body().string());
@@ -94,10 +108,7 @@ public class HttpUtils {
 
         // 如果有 param, 则添加
         if (httpRequest.hasQueryParameter()) {
-            for (String key : httpRequest.getQueryParameter().keySet()) {
-                String value = httpRequest.getQueryParameter().get(key);
-                urlBuilder.addQueryParameter(key, value);
-            }
+            httpRequest.getQueryParameter().forEach(urlBuilder::addQueryParameter);
         }
 
         return urlBuilder.toString();
@@ -106,10 +117,7 @@ public class HttpUtils {
     private static void p_addHeader(HttpRequest httpRequest, Request.Builder builder) {
         // 如果有 header, 则添加
         if (httpRequest.hasHeader()) {
-            for (String key : httpRequest.getHeader().keySet()) {
-                String value = httpRequest.getHeader().get(key);
-                builder.addHeader(key, value);
-            }
+            httpRequest.getHeader().forEach(builder::addHeader);
         }
     }
 
@@ -156,10 +164,7 @@ public class HttpUtils {
     private static FormBody p_formBody(HttpRequest httpRequest) {
         FormBody.Builder bodyBuilder = new FormBody.Builder();
         if (httpRequest.hasBodyParameter()) {
-            for (String key : httpRequest.getBodyParameter().keySet()) {
-                String value = httpRequest.getBodyParameter().get(key);
-                bodyBuilder.add(key, value);
-            }
+            httpRequest.getBodyParameter().forEach(bodyBuilder::add);
         }
 
         return bodyBuilder.build();
@@ -187,6 +192,7 @@ public class HttpUtils {
         response.setCode(-1);
         response.setHttpRequest(httpRequest);
         response.setBodyString(e.getMessage());
+        response.setSuccess(false);
 
         return response;
     }

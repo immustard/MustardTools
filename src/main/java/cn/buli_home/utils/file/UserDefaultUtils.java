@@ -102,10 +102,7 @@ public class UserDefaultUtils {
             jsonObject = new JSONObject();
         }
 
-        for (String key : map.keySet()) {
-            String value = StringUtils.convert2String(map.get(key));
-            jsonObject.put(key, value);
-        }
+        map.forEach(jsonObject::put);
 
         FileUtils.writeFile(PATH, jsonObject.toJSONString(), true);
     }

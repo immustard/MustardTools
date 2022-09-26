@@ -54,11 +54,9 @@ public class HttpRequest {
             return;
         }
 
-        for (String key : jsonObject.keySet()) {
-            String value = jsonObject.getString(key);
-
-            addHeader(key, value);
-        }
+        jsonObject.forEach( (k, v) -> {
+            addHeader(k, StringUtils.convert2String(v));
+        });
     }
 
     /**
@@ -90,11 +88,9 @@ public class HttpRequest {
             return;
         }
 
-        for (String key : jsonObject.keySet()) {
-            String value = jsonObject.getString(key);
-
-            addQueryParameter(key, value);
-        }
+        jsonObject.forEach( (k, v) -> {
+            addQueryParameter(k, StringUtils.convert2String(v));
+        });
     }
 
     /**
@@ -126,11 +122,9 @@ public class HttpRequest {
             return;
         }
 
-        for (String key : jsonObject.keySet()) {
-            String value = jsonObject.getString(key);
-
-            addBodyParameter(key, value);
-        }
+        jsonObject.forEach( (k, v) -> {
+            addBodyParameter(k, StringUtils.convert2String(v));
+        });
     }
 
     /**

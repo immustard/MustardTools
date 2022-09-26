@@ -21,4 +21,6 @@ public final class HttpResponse {
 
     private String bodyString;
 
+    private boolean success;
+
 }
