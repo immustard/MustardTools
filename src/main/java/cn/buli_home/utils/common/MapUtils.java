@@ -76,8 +76,7 @@ public class MapUtils {
      * @param model 模型
      * @param annotations 忽略字段注解
      */
-    @SafeVarargs
-    public static Map<String, Object> model2Map(Object model, Class<Annotation>... annotations) {
+    public static Map<String, Object> model2Map(Object model, Class... annotations) {
         if (model == null) {
             return new HashMap<String, Object>();
         }
@@ -126,8 +125,7 @@ public class MapUtils {
      * @param list 模型列表
      * @param annotations 忽略字段注解
      */
-    @SafeVarargs
-    public static List<Map<String, Object>> modelList2Map(List<?> list, Class<Annotation>... annotations) {
+    public static List<Map<String, Object>> modelList2Map(List<?> list, Class... annotations) {
         if (null == list) {
             return new ArrayList<>();
         }

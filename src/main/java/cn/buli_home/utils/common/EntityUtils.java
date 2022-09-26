@@ -23,7 +23,7 @@ public class EntityUtils {
      * @param model 模型
      * @param annotation 必有字段注解
      */
-    public static boolean checkRequiredField(Object model, Class<Annotation> annotation) {
+    public static boolean checkRequiredField(Object model, Class annotation) {
         if (null == model || null == annotation) {
             return false;
         }
@@ -42,7 +42,6 @@ public class EntityUtils {
             if (isStatic) {
                 continue;    //去除静态成员
             }
-
 
             Annotation ann = field.getAnnotation(annotation);
             if (null == ann) { continue; }
