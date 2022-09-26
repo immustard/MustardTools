@@ -1,5 +1,11 @@
 package cn.buli_home.utils.common;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,10 +16,7 @@ public class StringUtils {
      * 判断是否为空
      */
     public static boolean isEmpty(String str) {
-        if (Objects.isNull(str) || str.length() == 0) {
-            return true;
-        }
-        return false;
+        return Objects.isNull(str) || str.length() == 0;
     }
 
     /**
@@ -23,6 +26,9 @@ public class StringUtils {
         return isEmpty(replaceBlank(str));
     }
 
+    /**
+     * 去空白符
+     */
     public static String replaceBlank(String str) {
         if(isEmpty(str)){
             return "";
@@ -33,12 +39,24 @@ public class StringUtils {
         return m.replaceAll("");
     }
 
+    /**
+     * 将 Object 转换为 String
+     * null或<null> (不区分大小写), 认定为空
+     */
     public static String convert2String(Object obj) {
-        if (Objects.isNull(obj)) {
+        if (obj == null) {
             return "";
         }
 
-        return obj.toString();
+        if (obj instanceof String) {
+            if (((String) obj).equalsIgnoreCase("NULL") || ((String) obj).equalsIgnoreCase("<null>")) {
+                return "";
+            }
+
+            return (String) obj;
+        } else {
+            return obj.toString();
+        }
     }
 
     /**
@@ -133,7 +151,6 @@ public class StringUtils {
      * 去掉字符串指定的前缀
      * @param str 字符串名称
      * @param prefix 前缀数组
-     * @return
      */
     public static String removePrefix(String str, String[] prefix) {
         if (Objects.isNull(str) || str.length() == 0) {
@@ -155,36 +172,124 @@ public class StringUtils {
         }
     }
 
-    public static int parseInt(String str) {
-        if (Objects.isNull(str) || str.length() == 0) {
-            return 0;
-        }
+    /**
+     * 解析成 Integer
+     */
+    public static Integer parseInt(String str) {
+        String tmpStr = convert2String(str);
 
-        try {
-            return Integer.parseInt(str);
-        } catch (NumberFormatException e) {
+        if (tmpStr.equals("")) {
             return 0;
+        } else {
+            int n = 0;
+            try {
+                n = (int) Double.parseDouble(tmpStr);
+            } catch (Exception e) {
+                return 0;
+            }
+            return n;
         }
     }
 
-    public static long parseLong(String str) {
-        if (Objects.isNull(str) || str.length() == 0) {
-            return 0L;
-        }
+    /**
+     * 解析成 Long
+     */
+    public static Long parseLong(String str) {
+        String tmpStr = convert2String(str);
 
-        try {
-            return Long.parseLong(str);
-        } catch (NumberFormatException e) {
+        if (tmpStr.equals("")) {
             return 0L;
+        } else {
+            long n = 0;
+            try {
+                n = Long.parseLong(tmpStr);
+            } catch (Exception e) {
+                return 0L;
+            }
+            return n;
         }
     }
 
-    public static boolean parseBoolean(String str) {
-        if (Objects.isNull(str) || str.length() == 0) {
+    /**
+     * 解析成 Double
+     */
+    public static Double parseDouble(String str) {
+        String tmpStr = convert2String(str);
+
+        if (tmpStr.equals("")) {
+            return 0.0;
+        } else {
+            Double n = 0.0;
+            try {
+                n = Double.parseDouble(tmpStr);
+            } catch (Exception e) {
+                return 0.0;
+            }
+            return n;
+        }
+    }
+
+    /**
+     * 解析成 Boolean
+     */
+    public static Boolean parseBoolean(String str) {
+        if (isEmpty(str)) {
             return false;
         }
 
         return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("yes");
+    }
+
+    /**
+     * 分隔字符串, 之后取第n位子字符串
+     * 🌰: getSplitAtIdx("a,b,c", ",", 1) -> "b"
+     */
+    public static String getSplitAtIdx(String str, String regex, int idx) {
+        String string = convert2String(str);
+        String[] array = string.split(regex);
+
+        if (array.length > idx) {
+            return array[idx];
+        }
+
+        return "";
+    }
+
+    /**
+     * 是否有特殊字符
+     */
+    public static boolean hasSpecialChar(String str) {
+        String regEx = "[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.find();
+    }
+
+    /**
+     * 字节长度
+     */
+    public static int bytesLength(String str) {
+        return convert2String(str).getBytes().length;
+    }
+
+    /**
+     * base64
+     */
+    public static String base64(String str) {
+        return Base64.encodeBase64String(convert2String(str).getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * md5
+     */
+    public static String md5(String str) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            return Hex.encodeHexString(md5.digest(convert2String(str).getBytes(StandardCharsets.UTF_8)));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private static char p_upperChar(char c) {
@@ -200,5 +305,4 @@ public class StringUtils {
         }
         return c;
     }
-
 }

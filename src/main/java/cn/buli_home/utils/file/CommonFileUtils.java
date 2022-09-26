@@ -16,7 +16,6 @@ public class CommonFileUtils {
      * @param name      文件名
      * @param haveDate  是否有日期
      * @param canExtend 如果重名是否拓展
-     * @return
      */
     public static String generateHandleFileName(String name, boolean haveDate, boolean canExtend) {
         String path = FileConstant.RESULT_PATH_PREFIX + name;
