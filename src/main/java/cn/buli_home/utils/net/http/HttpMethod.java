@@ -1,7 +1,5 @@
 package cn.buli_home.utils.net.http;
 
-import org.springframework.lang.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +25,7 @@ public enum HttpMethod {
 
     private HttpMethod() {}
 
-    @Nullable
-    public static HttpMethod resolve(@Nullable String method) {
+    public static HttpMethod resolve(String method) {
         return method != null ? mappings.get(method) : null;
     }
 

@@ -7,7 +7,7 @@
 
     <groupId>cn.buli-home</groupId>
     <artifactId>MustardTools</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 
     <name>${project.artifactId}</name>
     <description>Buli-Home java Tools</description>
@@ -54,12 +54,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.17.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>2.7.2</version>
         </dependency>
 
         <dependency>
