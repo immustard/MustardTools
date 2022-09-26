@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cn.buli_home.utils.date.DateConstant.*;
+
 public class DateUtils {
 
     /**
@@ -12,16 +14,16 @@ public class DateUtils {
     private static final Map<String, SimpleDateFormat> simpleDateFormatMap = new HashMap<String, SimpleDateFormat>();
 
     static {
-        simpleDateFormatMap.put(DateConstant.FORMAT_DATE, new SimpleDateFormat(DateConstant.FORMAT_DATE));
-        simpleDateFormatMap.put(DateConstant.FORMAT_HOUR, new SimpleDateFormat(DateConstant.FORMAT_HOUR));
-        simpleDateFormatMap.put(DateConstant.FORMAT_MINUTE, new SimpleDateFormat(DateConstant.FORMAT_MINUTE));
-        simpleDateFormatMap.put(DateConstant.FORMAT_SECOND, new SimpleDateFormat(DateConstant.FORMAT_SECOND));
-        simpleDateFormatMap.put(DateConstant.FORMAT_MILLISECOND, new SimpleDateFormat(DateConstant.FORMAT_MILLISECOND));
-        simpleDateFormatMap.put(DateConstant.FORMAT_TRIM_DATE, new SimpleDateFormat(DateConstant.FORMAT_TRIM_DATE));
-        simpleDateFormatMap.put(DateConstant.FORMAT_TRIM_HOUR, new SimpleDateFormat(DateConstant.FORMAT_TRIM_HOUR));
-        simpleDateFormatMap.put(DateConstant.FORMAT_TRIM_MINUTE, new SimpleDateFormat(DateConstant.FORMAT_TRIM_MINUTE));
-        simpleDateFormatMap.put(DateConstant.FORMAT_TRIM_SECOND, new SimpleDateFormat(DateConstant.FORMAT_TRIM_SECOND));
-        simpleDateFormatMap.put(DateConstant.FORMAT_TRIM_MILLISECOND, new SimpleDateFormat(DateConstant.FORMAT_TRIM_MILLISECOND));
+        simpleDateFormatMap.put(FORMAT_DATE, new SimpleDateFormat(FORMAT_DATE));
+        simpleDateFormatMap.put(FORMAT_HOUR, new SimpleDateFormat(FORMAT_HOUR));
+        simpleDateFormatMap.put(FORMAT_MINUTE, new SimpleDateFormat(FORMAT_MINUTE));
+        simpleDateFormatMap.put(FORMAT_SECOND, new SimpleDateFormat(FORMAT_SECOND));
+        simpleDateFormatMap.put(FORMAT_MILLISECOND, new SimpleDateFormat(FORMAT_MILLISECOND));
+        simpleDateFormatMap.put(FORMAT_TRIM_DATE, new SimpleDateFormat(FORMAT_TRIM_DATE));
+        simpleDateFormatMap.put(FORMAT_TRIM_HOUR, new SimpleDateFormat(FORMAT_TRIM_HOUR));
+        simpleDateFormatMap.put(FORMAT_TRIM_MINUTE, new SimpleDateFormat(FORMAT_TRIM_MINUTE));
+        simpleDateFormatMap.put(FORMAT_TRIM_SECOND, new SimpleDateFormat(FORMAT_TRIM_SECOND));
+        simpleDateFormatMap.put(FORMAT_TRIM_MILLISECOND, new SimpleDateFormat(FORMAT_TRIM_MILLISECOND));
     }
 
     /**
@@ -59,7 +61,7 @@ public class DateUtils {
      * @return yyyy-MM-dd 格式时间（如：2022-06-17）
      */
     public static String formatDate(Date date) {
-        return format(date, DateConstant.FORMAT_DATE);
+        return format(date, FORMAT_DATE);
     }
 
     /**
@@ -68,8 +70,8 @@ public class DateUtils {
      * @param date Date 格式时间
      * @return yyyy-MM-dd HH:mm:ss 格式时间（如：2022-06-17 16:06:17）
      */
-    public static String formatDateTime(Date date) {
-        return format(date, DateConstant.FORMAT_SECOND);
+    public static String formatDateTimeSecond(Date date) {
+        return format(date, FORMAT_SECOND);
     }
 
     /**
@@ -78,8 +80,8 @@ public class DateUtils {
      * @param date Date 格式时间
      * @return yyyy-MM-dd HH:mm:ss:SSS 格式时间（如：2022-06-17 16:06:17:325）
      */
-    public static String formatDateTimeStamp(Date date) {
-        return format(date, DateConstant.FORMAT_MILLISECOND);
+    public static String formatDateTimeMillisecond(Date date) {
+        return format(date, FORMAT_MILLISECOND);
     }
 
     /**
@@ -89,7 +91,7 @@ public class DateUtils {
      * @return Date 格式时间
      */
     public static Date parseDate(String dateString) {
-        return parse(dateString, DateConstant.FORMAT_DATE);
+        return parse(dateString, FORMAT_DATE);
     }
 
     /**
@@ -98,18 +100,18 @@ public class DateUtils {
      * @param dateTimeStr yyyy-MM-dd HH:mm:ss 格式时间（如：2022-06-17 16:06:17）
      * @return Date 格式时间
      */
-    public static Date parseDateTime(String dateTimeStr) {
-        return parse(dateTimeStr, DateConstant.FORMAT_SECOND);
+    public static Date parseDateTimeSecond(String dateTimeStr) {
+        return parse(dateTimeStr, FORMAT_SECOND);
     }
 
     /**
      * 将 yyyy-MM-dd HH:mm:ss:SSS 格式时间转化为 Date 格式时间
      *
-     * @param dateTimeStampStr yyyy-MM-dd HH:mm:ss:SSS 格式时间（如：2022-06-17 16:06:17）
+     * @param dateTimeStr yyyy-MM-dd HH:mm:ss:SSS 格式时间（如：2022-06-17 16:06:17）
      * @return Date 格式时间
      */
-    public static Date parseDateTimeStamp(String dateTimeStampStr) {
-        return parse(dateTimeStampStr, DateConstant.FORMAT_MILLISECOND);
+    public static Date parseDateTimeMillisecond(String dateTimeStr) {
+        return parse(dateTimeStr, FORMAT_MILLISECOND);
     }
 
     /**
@@ -190,7 +192,7 @@ public class DateUtils {
         if (Objects.isNull(date)) {
             return 0;
         }
-        return Integer.parseInt(format(date, DateConstant.FORMAT_TRIM_DATE));
+        return Integer.parseInt(format(date, FORMAT_TRIM_DATE));
     }
 
     /**
@@ -199,11 +201,11 @@ public class DateUtils {
      * @param date 日期
      * @return 日期数字
      */
-    public static long getDateTimeNo(Date date) {
+    public static long getDateTimeSecond(Date date) {
         if (Objects.isNull(date)) {
             return 0L;
         }
-        return Long.parseLong(format(date, DateConstant.FORMAT_TRIM_SECOND));
+        return Long.parseLong(format(date, FORMAT_TRIM_SECOND));
     }
 
     /**
@@ -212,11 +214,31 @@ public class DateUtils {
      * @param date 日期
      * @return 日期数字
      */
-    public static long getDateTimeStampNo(Date date) {
+    public static long getDateTimeMillisecond(Date date) {
         if (Objects.isNull(date)) {
             return 0L;
         }
-        return Long.parseLong(format(date, DateConstant.FORMAT_TRIM_MILLISECOND));
+        return Long.parseLong(format(date, FORMAT_TRIM_MILLISECOND));
+    }
+
+    /**
+     * 获取时间戳
+     *
+     * @param date 日期
+     * @return 时间戳(秒级)
+     */
+    public static long getTimestampSecond(Date date) {
+        return date.getTime() / 1000;
+    }
+
+    /**
+     * 获取时间戳
+     *
+     * @param date 日期
+     * @return 时间戳(毫秒级)
+     */
+    public static long getTimestampMillisecond(Date date) {
+        return date.getTime();
     }
 
     /**
@@ -225,7 +247,7 @@ public class DateUtils {
      * @param date 时间
      * @return 0（时间为空）， 1（周一）， 2（周二），3（周三），4（周四），5（周五），6（周六），7（周日）
      */
-    public static int p_getWeek(Date date) {
+    private static int p_getWeek(Date date) {
         if (Objects.isNull(date)) {
             return 0;
         }
@@ -321,7 +343,7 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         DateNode node = new DateNode();
-        node.setTime(format(date, DateConstant.FORMAT_MILLISECOND));
+        node.setTime(format(date, FORMAT_MILLISECOND));
         node.setYear(calendar.get(Calendar.YEAR));
         node.setMonth(calendar.get(Calendar.MONTH) + 1);
         node.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -334,7 +356,7 @@ public class DateUtils {
         node.setWeekOfYear(getWeekOfYear(date));
         node.setWeekOfYearIgnoreLastYear(getWeekOfYearIgnoreLastYear(date));
         node.setMillisecondStamp(date.getTime());
-        node.setSecondStamp(node.getMillisecondStamp() / 1000);
+        node.setSecondStamp(date.getTime() / 1000);
         return node;
     }
 
@@ -567,6 +589,29 @@ public class DateUtils {
     }
 
     /**
+     * 比较两个日期的大小 (毫秒级)
+     * @param date1 日期1
+     * @param date2 日期2
+     * @return 返回值: 1, 前者大于后者; 0, 两者相同; -1, 前者小于后者; null, 日期中有空
+     */
+    public static Integer compareDays(Date date1, Date date2) {
+        if (Objects.isNull(date1) || Objects.isNull(date2)) {
+            return null;
+        }
+
+        long ts1 = getTimestampMillisecond(date1);
+        long ts2 = getTimestampMillisecond(date2);
+
+        if (ts2 - ts1 == 0) {
+            return 0;
+        } else if (ts1 > ts2) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
      * 获取两个日期相差的天数（以日期为单位计算，不以24小时制计算，详见下面说明）<br>
      * <p>
      * 【说明】比如 2022-06-17 23:00:00 和 2022-06-17 01:00:00，两者虽然只相差 2 个小时，但也算相差 1 天 <br>
@@ -682,40 +727,40 @@ public class DateUtils {
     }
 
     public static String convertMillisecond2TimeStr(long millisecond) {
-        if (millisecond < DateConstant.SECOND_MILLISECONDS) {
+        if (millisecond < SECOND_MILLISECONDS) {
             return millisecond + "ms";
         }
 
-        long sec = millisecond / DateConstant.SECOND_MILLISECONDS;
-        long mil = millisecond % DateConstant.SECOND_MILLISECONDS;
+        long sec = millisecond / SECOND_MILLISECONDS;
+        long mil = millisecond % SECOND_MILLISECONDS;
 
         return convertSecond2TimeStr(sec) + mil + "ms";
     }
 
     public static String convertSecond2TimeStr(long second) {
-        if (second < DateConstant.MINUTE_SECONDS) {
+        if (second < MINUTE_SECONDS) {
             return second + "s";
         }
 
-        long min = second / DateConstant.MINUTE_SECONDS;
-        long sec = second % DateConstant.MINUTE_SECONDS;
+        long min = second / MINUTE_SECONDS;
+        long sec = second % MINUTE_SECONDS;
 
         return convertMinute2TimeStr(min) + sec + "s";
     }
 
     public static String convertMinute2TimeStr(long minute) {
-        if (minute < DateConstant.HOUR_MINUTES) {
+        if (minute < HOUR_MINUTES) {
             return minute + "m";
-        } else if (minute < DateConstant.DAY_MINUTES) {
-            long hour = minute / DateConstant.HOUR_MINUTES;
-            long min = minute % DateConstant.HOUR_MINUTES;
+        } else if (minute < DAY_MINUTES) {
+            long hour = minute / HOUR_MINUTES;
+            long min = minute % HOUR_MINUTES;
 
             return hour + "h" + min + "m";
         }
 
-        long day = minute / DateConstant.DAY_MINUTES;
-        long hour = (minute % DateConstant.DAY_MINUTES) / DateConstant.HOUR_MINUTES;
-        long min = minute % DateConstant.HOUR_MINUTES;
+        long day = minute / DAY_MINUTES;
+        long hour = (minute % DAY_MINUTES) / HOUR_MINUTES;
+        long min = minute % HOUR_MINUTES;
 
         return day + "d" + hour + "h" + min + "m";
     }
