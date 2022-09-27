@@ -18,7 +18,7 @@ public class AsyncSendCallback implements Callback {
         }
 
         if (null != recordMetadata && isLog) {
-            log.debug("返回结果: topic->" + recordMetadata.topic() + ", partition->" + recordMetadata.partition() +  ", offset->" + recordMetadata.offset());
+            log.info("返回结果: topic->" + recordMetadata.topic() + ", partition->" + recordMetadata.partition() +  ", offset->" + recordMetadata.offset());
         }
     }
 }

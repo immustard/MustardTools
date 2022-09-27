@@ -39,10 +39,16 @@ public class HttpUtils {
      */
     public static HttpResponse request(HttpRequest httpRequest) {
         try {
-            Request request = p_generateRequest(httpRequest);
+            log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp send request: " + httpRequest);
 
-            return p_request(httpRequest, request);
+            Request request = p_generateRequest(httpRequest);
+            HttpResponse response = p_request(httpRequest, request);
+
+            log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp receive response: " + response);
+
+            return response;
         } catch (Exception e) {
+            log.error("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C " + e.getMessage());
             return p_errorResponse(httpRequest, e);
         }
     }
@@ -56,6 +62,8 @@ public class HttpUtils {
                 interceptorList.stream(),
                 Arrays.stream(interceptors)).distinct().collect(Collectors.toList()
         );
+
+        log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp add interceptors: " + interceptorList);
     }
 
     /**
@@ -67,6 +75,7 @@ public class HttpUtils {
                 networkInterceptorList.stream(),
                 Arrays.stream(interceptors)).distinct().collect(Collectors.toList()
         );
+        log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp add network interceptors: " + networkInterceptorList);
     }
 
     /**
@@ -75,6 +84,8 @@ public class HttpUtils {
      */
     public static void clearInterceptor() {
         interceptorList.clear();
+
+        log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp clear interceptors.");
     }
 
     /**
@@ -83,8 +94,13 @@ public class HttpUtils {
      */
     public static void clearNetworkInterceptor() {
         networkInterceptorList.clear();
+
+        log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp clear network interceptors.");
     }
 
+    /**
+     * 构造 okHttp 请求客户端
+     */
     public static void buildClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -92,6 +108,8 @@ public class HttpUtils {
         networkInterceptorList.forEach(builder::addNetworkInterceptor);
 
         httpClient = builder.build();
+
+        log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp build client finished: " + interceptorList.size() + "interceptors, " + networkInterceptorList.size() + "networkInterceptors");
     }
 
     // 请求底层方法
@@ -106,6 +124,7 @@ public class HttpUtils {
 
                     return p_convertResponse(response, httpRequest);
                 } catch (IOException e) {
+                    log.error("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C " + e.getMessage());
                     return p_errorResponse(httpRequest, e);
                 }
             }
@@ -117,6 +136,7 @@ public class HttpUtils {
 
                     return p_convertResponse(callback.get(), httpRequest);
                 } catch (Exception e) {
+                    log.error("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C " + e.getMessage());
                     return p_errorResponse(httpRequest, e);
                 }
             }
@@ -139,7 +159,7 @@ public class HttpUtils {
             httpResponse.setBodyString(string);
             httpResponse.setBody(JSON.parseObject(string));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C " + e.getMessage());
         }
 
         return httpResponse;
