@@ -7,6 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * HTTP 请求工具类
@@ -21,7 +26,10 @@ public class HttpUtils {
 
     private static OkHttpClient httpClient = new OkHttpClient.Builder()
             .build();
-
+    
+    private static List<Interceptor> interceptorList = new ArrayList<>();
+    private static List<Interceptor> networkInterceptorList = new ArrayList<>();
+    
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_GENERAL = MediaType.parse("application/octet-stream");
     private static final MediaType MEDIA_TYPE_IMAGE = MediaType.parse("image/png");
@@ -40,14 +48,49 @@ public class HttpUtils {
     }
 
     /**
-     * 添加拦截器
+     * 添加拦截器 (根据`equals()`去重)
+     * 添加之后需调用 `buildClient()` 生效
      */
     public static void addInterceptor(Interceptor... interceptors) {
+        interceptorList = Stream.concat(
+                interceptorList.stream(),
+                Arrays.stream(interceptors)).distinct().collect(Collectors.toList()
+        );
+    }
+
+    /**
+     * 添加 network 拦截器 (根据`equals()`去重)
+     * 添加之后需调用 `buildClient()` 生效
+     */
+    public static void addNetworkInterceptor(Interceptor... interceptors) {
+        networkInterceptorList = Stream.concat(
+                networkInterceptorList.stream(),
+                Arrays.stream(interceptors)).distinct().collect(Collectors.toList()
+        );
+    }
+
+    /**
+     * 清空拦截器
+     * 清空之后需调用 `buildClient()` 生效
+     */
+    public static void clearInterceptor() {
+        interceptorList.clear();
+    }
+
+    /**
+     * 清空 network 拦截器
+     * 清空之后需调用 `buildClient()` 生效
+     */
+    public static void clearNetworkInterceptor() {
+        networkInterceptorList.clear();
+    }
+
+    public static void buildClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        for (Interceptor interceptor : interceptors) {
-            builder.addInterceptor(interceptor);
-        }
+        interceptorList.forEach(builder::addInterceptor);
+        networkInterceptorList.forEach(builder::addNetworkInterceptor);
+
         httpClient = builder.build();
     }
 
