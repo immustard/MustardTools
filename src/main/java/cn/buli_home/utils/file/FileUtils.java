@@ -98,4 +98,18 @@ public class FileUtils {
 
         return stringBuilder.toString();
     }
+
+    /**
+     * 创建文件夹
+     */
+    public static void createFolder(String path) throws IOException {
+        Path iPath = Paths.get(path);
+        boolean exists = Files.exists(iPath);
+
+        if (exists) {
+            return ;
+        }
+
+        Files.createDirectories(iPath);
+    }
 }

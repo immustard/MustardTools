@@ -6,6 +6,7 @@ import org.apache.commons.codec.binary.Hex;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,13 +31,49 @@ public class StringUtils {
      * 去空白符
      */
     public static String replaceBlank(String str) {
+        return replace(str, "\\s*|\t|\r|\n|&nbsp;");
+    }
+
+    /**
+     * 字符串替换
+     * @param str 待替换字符串
+     * @param pattern 匹配规则
+     */
+    public static String replace(String str, String pattern) {
         if(isEmpty(str)){
             return "";
         }
 
-        Pattern p = Pattern.compile("\\s*|\t|\r|\n|&nbsp;");
+        Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(str);
+
         return m.replaceAll("");
+    }
+
+    /**
+     * 替换渲染模板:
+     * e.g. template: "My name is ${name} and I am ${age} years old."
+     *      params: {"name": "mustard", "age": 18}
+     *      result: My name is mustard and I am 18 years old.
+     *
+     * @param template 模板
+     * @param params 替换内容
+     */
+    public static String replaceTemplate(String template, Map<String , Object> params) {
+        if (Objects.isNull(template) || Objects.isNull(params)) {
+            return null;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        Matcher m = Pattern.compile("\\$\\{\\w+\\}").matcher(template);
+        while (m.find()) {
+            String param = m.group();
+            Object value = params.get(param.substring(2, param.length() - 1));
+            m.appendReplacement(sb, value == null ? "" : value.toString());
+        }
+        m.appendTail(sb);
+
+        return sb.toString();
     }
 
     /**
