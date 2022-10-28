@@ -6,6 +6,6 @@ This is personal java utils.
 <dependency>
     <groupId>cn.buli-home</groupId>
     <artifactId>MustardTools</artifactId>
-    <version>0.1.1</version>
+    <version>${MustardTools.version}</version>
 </dependency>
 ```
