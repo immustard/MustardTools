@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FileUtils {
 
@@ -19,20 +20,24 @@ public class FileUtils {
      * 按行读取文件
      */
     public static List<Tuple2<Integer, String>> readFileByLine(File file) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        BufferedReader reader = null;
 
         String temp = null;
         int line = 1;
 
         List<Tuple2<Integer, String>> resultList = new ArrayList<>();
 
-        while ((temp = reader.readLine()) != null) {
-            resultList.add(Tuple.of(line, temp));
-            line++;
-        }
+        try {
+            reader = new BufferedReader(new FileReader(file));
 
-        if (reader != null) {
-            reader.close();
+            while ((temp = reader.readLine()) != null) {
+                resultList.add(Tuple.of(line, temp));
+                line++;
+            }
+        } finally {
+            if (Objects.nonNull(reader)) {
+                reader.close();
+            }
         }
 
         return resultList;
@@ -69,9 +74,33 @@ public class FileUtils {
     }
 
     /**
+     * 写入内容到指定文件
+     * @param file 文件
+     * @param content 写入内容
+     * @param overwrite 是否覆盖
+     */
+    public static void writeFile(File file, String content, boolean overwrite) throws Exception {
+        if (Objects.isNull(file)) {
+            return;
+        }
+
+        FileWriter writer = null;
+
+        try {
+            writer = new FileWriter(file, !overwrite);
+            writer.append(content);
+            writer.flush();
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
+        }
+    }
+
+    /**
      * 读取文件内容
      */
-    public static String readFile(String path) {
+    public static String readFile(String path) throws Exception {
         boolean exists = CommonFileUtils.existsFile(path);
         if (!exists) { return ""; }
 
@@ -91,9 +120,10 @@ public class FileUtils {
                     stringBuilder.append((char) tempchar);
                 }
             }
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            if (Objects.nonNull(reader)) {
+                reader.close();
+            }
         }
 
         return stringBuilder.toString();

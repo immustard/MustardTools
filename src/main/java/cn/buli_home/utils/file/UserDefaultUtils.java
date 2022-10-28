@@ -46,7 +46,7 @@ public class UserDefaultUtils {
     /**
      * 读取文件内容
      */
-    public static String loadRecordString(String key) {
+    public static String loadRecordString(String key) throws Exception {
         return getInstance().p_loadRecordString(key);
     }
 
@@ -107,7 +107,7 @@ public class UserDefaultUtils {
         FileUtils.writeFile(PATH, jsonObject.toJSONString(), true);
     }
 
-    private String p_loadRecordString(String key) {
+    private String p_loadRecordString(String key) throws Exception {
         if (Objects.isNull(key)) {
             return "";
         }
