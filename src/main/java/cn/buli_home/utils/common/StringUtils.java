@@ -6,6 +6,8 @@ import org.apache.commons.codec.binary.Hex;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -327,6 +329,56 @@ public class StringUtils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * 字符串是否包含该正则
+     * @param str 待匹配字符串
+     * @param regex 正则表达式
+     */
+    public static Boolean hasRegex(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        return pattern.matcher(str).find();
+    }
+
+    /**
+     * 字符串是否只包含该正则
+     * @param str 待匹配字符串
+     * @param regex 正则表达式
+     */
+    public static Boolean onlyRegex(String str, String regex) {
+        return Pattern.matches(regex, str);
+    }
+
+    /**
+     * 查找满足正则匹配条件的第一个字符串
+     * @param str 待匹配字符串
+     * @param regex 正则表达式
+     */
+    public static String findRegexFirst(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return null;
+    }
+
+    /**
+     * 查找满足正则匹配条件的所有字符串
+     * @param str 待匹配字符串
+     * @param regex 正则表达式
+     */
+    public static List<String> findRegexList(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+
+        List<String> list = new ArrayList<>();
+        while (matcher.find()) {
+            list.add(matcher.group());
+        }
+
+        return list;
     }
 
     private static char p_upperChar(char c) {

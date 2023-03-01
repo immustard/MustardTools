@@ -133,13 +133,31 @@ public class FileUtils {
      * 创建文件夹
      */
     public static void createFolder(String path) throws IOException {
-        Path iPath = Paths.get(path);
-        boolean exists = Files.exists(iPath);
-
-        if (exists) {
+        if (folderExists(path)) {
             return ;
         }
 
+        Path iPath = Paths.get(path);
         Files.createDirectories(iPath);
+    }
+
+    public static boolean folderExists(String path) {
+        File file = new File(path);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean fileExists(String path) {
+        File file = new File(path);
+        return file.exists();
+    }
+
+    public static boolean renameFile(String oldPath, String newPath) {
+        File file = new File(oldPath);
+
+        if (!file.exists()) {
+            return false;
+        }
+
+        return file.renameTo(new File(newPath));
     }
 }
