@@ -22,6 +22,8 @@ public class NumberUtils {
         return !number.equals(0);
     }
 
-
+    public static int randomInt(int min, int max) {
+        return (int) (Math.random() * (max - min) + min);
+    }
 
 }
