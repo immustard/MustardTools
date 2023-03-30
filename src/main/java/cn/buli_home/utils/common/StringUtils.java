@@ -276,7 +276,9 @@ public class StringUtils {
             return false;
         }
 
-        return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("yes");
+        return str.equalsIgnoreCase("true")
+                || str.equalsIgnoreCase("yes")
+                || str.equalsIgnoreCase("success");
     }
 
     /**
