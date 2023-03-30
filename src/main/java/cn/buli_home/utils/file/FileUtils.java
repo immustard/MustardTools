@@ -17,84 +17,171 @@ import java.util.Objects;
 public class FileUtils {
 
     /**
+     * 缓存区大小
+     */
+    private static final int BUFFER_SIZE = 1024;
+
+    /**
+     * 换行符
+     */
+    private static final String NEWLINE_CONTENT = "\r\n";
+
+    /**
+     * 文件打开模式
+     */
+    private static final String FILE_OPEN_MODE = "rw";
+
+    /**
      * 按行读取文件
      */
     public static List<Tuple2<Integer, String>> readFileByLine(File file) throws Exception {
-        BufferedReader reader = null;
-
-        String temp = null;
-        int line = 1;
-
         List<Tuple2<Integer, String>> resultList = new ArrayList<>();
 
-        try {
-            reader = new BufferedReader(new FileReader(file));
-
-            while ((temp = reader.readLine()) != null) {
-                resultList.add(Tuple.of(line, temp));
-                line++;
+        // 分配一个新的字节缓冲区。
+        ByteBuffer rebuff = ByteBuffer.allocate(1024);
+        // 创建path文件的文件字节输入流
+        FileInputStream fileInputStream = new FileInputStream(file);
+        // 获取通道
+        FileChannel fileChannel = fileInputStream.getChannel();
+        // 当前行数
+        int lineIdx = 0;
+        // 换行符，目前需手动指定
+        int CF = "\n".getBytes()[0];
+        // 临时数组
+        byte[] temp = new byte[0];
+        // 循环读取通道中的数据并放入rbuf中
+        while (fileChannel.read(rebuff) != -1) {
+            // 创建与 rebuff 容量一样大的数组
+            byte[] rbyte = new byte[rebuff.position()];
+            // 读/写指针position指到缓冲区头部,并设置了最大读取长度
+            rebuff.flip();
+            // 将rebuff中的数据传输到rbyte中
+            rebuff.get(rbyte);
+            // 每行的起始位下标，相当于当前所读取到的byte数组
+            int startNum = 0;
+            // 循环读取rbyte，判断是否有换行符
+            for (int i = 0; i < rbyte.length; i++) {
+                // 当存在换行符时
+                if (rbyte[i] == CF) {
+                    // 创建临时数组用于保存整行数据
+                    byte[] line = new byte[temp.length + i - startNum];
+                    // 将上次读取剩下的部分存入line
+                    System.arraycopy(temp, 0, line, 0, temp.length);
+                    // 将读取到的当前rbyte中的数据追加到line
+                    System.arraycopy(rbyte, startNum, line, temp.length, i - startNum);
+                    // 更新下一行起始位置
+                    startNum = i + 1;
+                    // 初始化temp数组
+                    temp = new byte[0];
+                    // 处理数据,此时line即为要处理的一整行数据
+                    String lineStr = new String(line, StandardCharsets.UTF_8);
+                    resultList.add(Tuple.of(lineIdx, lineStr));
+                    lineIdx++;
+                }
             }
-        } finally {
-            if (Objects.nonNull(reader)) {
-                reader.close();
+            // 说明rbyte最后还剩不完整的一行
+            if (startNum < rbyte.length) {
+                byte[] temp2 = new byte[temp.length + rbyte.length - startNum];
+                System.arraycopy(temp, 0, temp2, 0, temp.length);
+                System.arraycopy(rbyte, startNum, temp2, temp.length, rbyte.length - startNum);
+                temp = temp2;
             }
+            rebuff.clear();
         }
+        // 兼容最后一行没有换行的情况
+        if (temp.length > 0) {
+            // 处理数据,此时line即为要处理的一整行数据
+            String lineStr = new String(temp, StandardCharsets.UTF_8);
+            resultList.add(Tuple.of(lineIdx, lineStr));
+        }
+        // 关闭通道
+        fileChannel.close();
 
         return resultList;
     }
 
     /**
      * 写入内容到指定文件
-     * @param path 文件路径
-     * @param content 写入内容
+     *
+     * @param path      文件路径
+     * @param content   写入内容
      * @param overwrite 是否覆盖
      */
+    @Deprecated
     public static void writeFile(String path, String content, boolean overwrite) throws Exception {
-        Path oPath = Paths.get(path);
-        boolean exists = Files.exists(oPath);
-
-        if (exists) {
-            if (!overwrite) {
-                return;
-            }
-            Files.delete(oPath);
-        }
-
-        RandomAccessFile stream = new RandomAccessFile(path, "rw");
-        FileChannel channel = stream.getChannel();
-
-        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
-        buffer.put(bytes);
-        buffer.flip();
-        channel.write(buffer);
-
-        channel.close();
-        stream.close();
+        writeFile(path, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
     }
 
     /**
      * 写入内容到指定文件
-     * @param file 文件
-     * @param content 写入内容
+     *
+     * @param path      文件路径
+     * @param content   写入内容
+     * @param writeType 写模式
+     */
+    public static void writeFile(String path, String content, FileWriteType writeType) throws Exception {
+        writeFile(new File(path), content, writeType);
+    }
+
+    /**
+     * 写入内容到指定文件
+     *
+     * @param file      文件
+     * @param content   写入内容
      * @param overwrite 是否覆盖
      */
+    @Deprecated
     public static void writeFile(File file, String content, boolean overwrite) throws Exception {
+        writeFile(file, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
+    }
+
+    /**
+     * 写入内容到指定文件
+     *
+     * @param file      文件
+     * @param content   写入内容
+     * @param writeType 写模式
+     */
+    public static void writeFile(File file, String content, FileWriteType writeType) throws Exception {
         if (Objects.isNull(file)) {
-            return;
+            throw new FileNotFoundException();
         }
 
-        FileWriter writer = null;
-
-        try {
-            writer = new FileWriter(file, !overwrite);
-            writer.append(content);
-            writer.flush();
-        } finally {
-            if (Objects.nonNull(writer)) {
-                writer.close();
+        if (writeType == FileWriteType.ONCE) {
+            if (file.exists()) {
+                return;
             }
         }
+
+        if (writeType == FileWriteType.OVERWRITE) {
+            boolean ignored = file.delete();
+        }
+
+        RandomAccessFile raFile = new RandomAccessFile(file, FILE_OPEN_MODE);
+        FileChannel channel = raFile.getChannel();
+
+        // 如果是追加新行, 且文件不为空
+        String writeContent = content;
+        if (writeType == FileWriteType.APPEND_NEWLINE && channel.size() != 0) {
+            writeContent = NEWLINE_CONTENT.concat(content);
+        }
+        byte[] bytes = writeContent.getBytes(StandardCharsets.UTF_8);
+        ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+
+        channel.position(channel.size());
+
+        // 先清空一下缓存区
+        buffer.clear();
+
+        buffer.put(bytes);
+        buffer.flip();
+
+        while (buffer.hasRemaining()) {
+            channel.write(buffer);
+        }
+
+        channel.close();
+        raFile.close();
     }
 
     /**
@@ -102,29 +189,37 @@ public class FileUtils {
      */
     public static String readFile(String path) throws Exception {
         boolean exists = CommonFileUtils.existsFile(path);
-        if (!exists) { return ""; }
+        if (!exists) {
+            throw new FileNotFoundException();
+        }
 
-        File file = new File(path);
-        Reader reader = null;
+        //创建FileChannel
+        RandomAccessFile raFile = new RandomAccessFile(path, FILE_OPEN_MODE);
+        FileChannel channel = raFile.getChannel();
+
+        //创建Buffer
+        ByteBuffer buf = ByteBuffer.allocate(BUFFER_SIZE);
+
+        //读取数据到buffer中
         StringBuilder stringBuilder = new StringBuilder();
 
-        try {
-            // 一次读一个字符
-            reader = new InputStreamReader(new FileInputStream(file));
-            int tempchar;
-            while ((tempchar = reader.read()) != -1) {
+        int bytesRead = channel.read(buf);
+        while (bytesRead != -1) {
+            buf.flip();
+            while (buf.hasRemaining()) {
+                char tChar = (char) buf.get();
                 // 对于windows下，\r\n这两个字符在一起时，表示一个换行。
                 // 但如果这两个字符分开显示时，会换两次行。
                 // 因此，屏蔽掉\r，或者屏蔽\n。否则，将会多出很多空行。
-                if (((char) tempchar) != '\r') {
-                    stringBuilder.append((char) tempchar);
+                if ((tChar) != '\r') {
+                    stringBuilder.append(tChar);
                 }
             }
-        } finally {
-            if (Objects.nonNull(reader)) {
-                reader.close();
-            }
+            buf.clear();
+            bytesRead = channel.read(buf);
         }
+        channel.close();
+        raFile.close();
 
         return stringBuilder.toString();
     }
@@ -134,7 +229,7 @@ public class FileUtils {
      */
     public static void createFolder(String path) throws IOException {
         if (folderExists(path)) {
-            return ;
+            return;
         }
 
         Path iPath = Paths.get(path);

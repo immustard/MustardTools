@@ -104,7 +104,7 @@ public class UserDefaultUtils {
 
         map.forEach(jsonObject::put);
 
-        FileUtils.writeFile(PATH, jsonObject.toJSONString(), true);
+        FileUtils.writeFile(PATH, jsonObject.toJSONString(), FileWriteType.OVERWRITE);
     }
 
     private String p_loadRecordString(String key) throws Exception {
@@ -142,7 +142,7 @@ public class UserDefaultUtils {
 
     private void p_cleanAll() {
         try {
-            FileUtils.writeFile(PATH, "", true);
+            FileUtils.writeFile(PATH, "", FileWriteType.OVERWRITE);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
