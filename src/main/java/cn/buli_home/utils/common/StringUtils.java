@@ -324,9 +324,39 @@ public class StringUtils {
      * md5
      */
     public static String md5(String str) {
+        return hash(str, "MD5");
+    }
+
+    /**
+     * sah1
+     */
+    public static String sha1(String str) {
+        return hash(str, "SHA-1");
+    }
+
+    /**
+     * sha256
+     */
+    public static String sha256(String str) {
+        return hash(str, "SHA-256");
+    }
+
+    /**
+     * sha512
+     */
+    public static String sha512(String str) {
+        return hash(str, "SHA-512");
+    }
+
+    /**
+     * hash 值
+     * @param str 字符串
+     * @param type 类型: (🌰: MD5, SHA-1, ...)
+     */
+    public static String hash(String str, String type) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            return Hex.encodeHexString(md5.digest(convert2String(str).getBytes(StandardCharsets.UTF_8)));
+            MessageDigest digest = MessageDigest.getInstance(type);
+            return Hex.encodeHexString(digest.digest(convert2String(str).getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
