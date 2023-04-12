@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FileUtils {
 
@@ -120,44 +119,19 @@ public class FileUtils {
      * @param writeType 写模式
      */
     public static void writeFile(String path, String content, FileWriteType writeType) throws Exception {
-        writeFile(new File(path), content, writeType);
-    }
-
-    /**
-     * 写入内容到指定文件
-     *
-     * @param file      文件
-     * @param content   写入内容
-     * @param overwrite 是否覆盖
-     */
-    @Deprecated
-    public static void writeFile(File file, String content, boolean overwrite) throws Exception {
-        writeFile(file, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
-    }
-
-    /**
-     * 写入内容到指定文件
-     *
-     * @param file      文件
-     * @param content   写入内容
-     * @param writeType 写模式
-     */
-    public static void writeFile(File file, String content, FileWriteType writeType) throws Exception {
-        if (Objects.isNull(file)) {
-            throw new FileNotFoundException();
-        }
+        Path oPath = Paths.get(path);
 
         if (writeType == FileWriteType.ONCE) {
-            if (file.exists()) {
+            if (Files.exists(oPath)) {
                 return;
             }
         }
 
         if (writeType == FileWriteType.OVERWRITE) {
-            boolean ignored = file.delete();
+            Files.delete(oPath);
         }
 
-        RandomAccessFile raFile = new RandomAccessFile(file, FILE_OPEN_MODE);
+        RandomAccessFile raFile = new RandomAccessFile(path, FILE_OPEN_MODE);
         FileChannel channel = raFile.getChannel();
 
         // 如果是追加新行, 且文件不为空
@@ -182,6 +156,29 @@ public class FileUtils {
 
         channel.close();
         raFile.close();
+    }
+
+    /**
+     * 写入内容到指定文件
+     *
+     * @param file      文件
+     * @param content   写入内容
+     * @param overwrite 是否覆盖
+     */
+    @Deprecated
+    public static void writeFile(File file, String content, boolean overwrite) throws Exception {
+        writeFile(file, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
+    }
+
+    /**
+     * 写入内容到指定文件
+     *
+     * @param file      文件
+     * @param content   写入内容
+     * @param writeType 写模式
+     */
+    public static void writeFile(File file, String content, FileWriteType writeType) throws Exception {
+        writeFile(file.getPath(), content, writeType);
     }
 
     /**
