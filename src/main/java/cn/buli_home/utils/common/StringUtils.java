@@ -62,20 +62,7 @@ public class StringUtils {
      * @param params 替换内容
      */
     public static String replaceTemplate(String template, Map<String , Object> params) {
-        if (Objects.isNull(template) || Objects.isNull(params)) {
-            return null;
-        }
-
-        StringBuffer sb = new StringBuffer();
-        Matcher m = Pattern.compile("\\$\\{\\w+\\}").matcher(template);
-        while (m.find()) {
-            String param = m.group();
-            Object value = params.get(param.substring(2, param.length() - 1));
-            m.appendReplacement(sb, value == null ? "" : value.toString());
-        }
-        m.appendTail(sb);
-
-        return sb.toString();
+        return replaceTemplate(template, params, null);
     }
 
     /**
