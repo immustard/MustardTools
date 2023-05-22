@@ -79,6 +79,38 @@ public class StringUtils {
     }
 
     /**
+     * 替换渲染模板:
+     * e.g. template: "My name is ${name} and I am ${age} years old."
+     *      params: {"name": "mustard", "age": 18}
+     *      result: My name is mustard and I am 18 years old.
+     *
+     * @param template 模板
+     * @param params 替换内容
+     */
+    public static String replaceTemplate(String template, Map<String , Object> params, List<String> excludes) {
+        if (Objects.isNull(template) || Objects.isNull(params)) {
+            return null;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        Matcher m = Pattern.compile("\\$\\{\\w+\\}").matcher(template);
+        while (m.find()) {
+            String param = m.group();
+            String content = param.substring(2, param.length() - 1);
+
+            if (Objects.nonNull(excludes) && excludes.contains(content)) {
+                continue;
+            }
+
+            Object value = params.get(content);
+            m.appendReplacement(sb, Matcher.quoteReplacement(value == null ? "" : value.toString()));
+        }
+        m.appendTail(sb);
+
+        return sb.toString();
+    }
+
+    /**
      * 将 Object 转换为 String
      * null或<null> (不区分大小写), 认定为空
      */

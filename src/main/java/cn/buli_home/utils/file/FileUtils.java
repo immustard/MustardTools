@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FileUtils {
 
@@ -108,7 +109,27 @@ public class FileUtils {
      */
     @Deprecated
     public static void writeFile(String path, String content, boolean overwrite) throws Exception {
-        writeFile(path, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
+        Path oPath = Paths.get(path);
+        boolean exists = Files.exists(oPath);
+
+        if (exists) {
+            if (!overwrite) {
+                return;
+            }
+            Files.delete(oPath);
+        }
+
+        RandomAccessFile stream = new RandomAccessFile(path, "rw");
+        FileChannel channel = stream.getChannel();
+
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
+        buffer.put(bytes);
+        buffer.flip();
+        channel.write(buffer);
+
+        channel.close();
+        stream.close();
     }
 
     /**
@@ -167,7 +188,21 @@ public class FileUtils {
      */
     @Deprecated
     public static void writeFile(File file, String content, boolean overwrite) throws Exception {
-        writeFile(file, content, overwrite ? FileWriteType.OVERWRITE : FileWriteType.ONCE);
+        if (Objects.isNull(file)) {
+            return;
+        }
+
+        FileWriter writer = null;
+
+        try {
+            writer = new FileWriter(file, !overwrite);
+            writer.append(content);
+            writer.flush();
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
+        }
     }
 
     /**
