@@ -38,11 +38,12 @@ public class StringUtils {
 
     /**
      * 字符串替换
-     * @param str 待替换字符串
+     *
+     * @param str     待替换字符串
      * @param pattern 匹配规则
      */
     public static String replace(String str, String pattern) {
-        if(isEmpty(str)){
+        if (isEmpty(str)) {
             return "";
         }
 
@@ -55,26 +56,26 @@ public class StringUtils {
     /**
      * 替换渲染模板:
      * e.g. template: "My name is ${name} and I am ${age} years old."
-     *      params: {"name": "mustard", "age": 18}
-     *      result: My name is mustard and I am 18 years old.
+     * params: {"name": "mustard", "age": 18}
+     * result: My name is mustard and I am 18 years old.
      *
      * @param template 模板
-     * @param params 替换内容
+     * @param params   替换内容
      */
-    public static String replaceTemplate(String template, Map<String , Object> params) {
+    public static String replaceTemplate(String template, Map<String, Object> params) {
         return replaceTemplate(template, params, null);
     }
 
     /**
      * 替换渲染模板:
      * e.g. template: "My name is ${name} and I am ${age} years old."
-     *      params: {"name": "mustard", "age": 18}
-     *      result: My name is mustard and I am 18 years old.
+     * params: {"name": "mustard", "age": 18}
+     * result: My name is mustard and I am 18 years old.
      *
      * @param template 模板
-     * @param params 替换内容
+     * @param params   替换内容
      */
-    public static String replaceTemplate(String template, Map<String , Object> params, List<String> excludes) {
+    public static String replaceTemplate(String template, Map<String, Object> params, List<String> excludes) {
         if (Objects.isNull(template) || Objects.isNull(params)) {
             return null;
         }
@@ -95,6 +96,24 @@ public class StringUtils {
         m.appendTail(sb);
 
         return sb.toString();
+    }
+
+    /**
+     * 替换最后一个对应字符
+     *
+     * @param str 待替换字符串
+     * @param c   匹配字符
+     * @param r   特换字符
+     * @return 替换后字符串
+     */
+    public static String replaceLastChar(String str, char c, char r) {
+        int lastIdx = str.lastIndexOf(c);
+        if (lastIdx >= 0) {
+            StringBuilder sb = new StringBuilder(str);
+            sb.setCharAt(lastIdx, r);
+            return sb.toString();
+        }
+        return str;
     }
 
     /**
@@ -207,7 +226,8 @@ public class StringUtils {
 
     /**
      * 去掉字符串指定的前缀
-     * @param str 字符串名称
+     *
+     * @param str    字符串名称
      * @param prefix 前缀数组
      */
     public static String removePrefix(String str, String[] prefix) {
@@ -217,7 +237,7 @@ public class StringUtils {
             if (null != prefix) {
                 String[] prefixArray = prefix;
 
-                for(int i = 0; i < prefix.length; ++i) {
+                for (int i = 0; i < prefix.length; ++i) {
                     String pf = prefixArray[i];
                     if (str.toLowerCase().matches("^" + pf.toLowerCase() + ".*")) {
                         //截取前缀后面的字符串
@@ -369,7 +389,8 @@ public class StringUtils {
 
     /**
      * hash 值
-     * @param str 字符串
+     *
+     * @param str  字符串
      * @param type 类型: (🌰: MD5, SHA-1, ...)
      */
     public static String hash(String str, String type) {
@@ -384,7 +405,8 @@ public class StringUtils {
 
     /**
      * 字符串是否包含该正则
-     * @param str 待匹配字符串
+     *
+     * @param str   待匹配字符串
      * @param regex 正则表达式
      */
     public static Boolean hasRegex(String str, String regex) {
@@ -394,7 +416,8 @@ public class StringUtils {
 
     /**
      * 字符串是否只包含该正则
-     * @param str 待匹配字符串
+     *
+     * @param str   待匹配字符串
      * @param regex 正则表达式
      */
     public static Boolean onlyRegex(String str, String regex) {
@@ -403,7 +426,8 @@ public class StringUtils {
 
     /**
      * 查找满足正则匹配条件的第一个字符串
-     * @param str 待匹配字符串
+     *
+     * @param str   待匹配字符串
      * @param regex 正则表达式
      */
     public static String findRegexFirst(String str, String regex) {
@@ -417,7 +441,8 @@ public class StringUtils {
 
     /**
      * 查找满足正则匹配条件的所有字符串
-     * @param str 待匹配字符串
+     *
+     * @param str   待匹配字符串
      * @param regex 正则表达式
      */
     public static List<String> findRegexList(String str, String regex) {
@@ -430,6 +455,16 @@ public class StringUtils {
         }
 
         return list;
+    }
+
+    /**
+     * 获取字符串中指定字符串数量
+     *
+     * @param str    待匹配字符串
+     * @param symbol 指定字符串
+     */
+    private static int specifiedSymbolCount(String str, String symbol) {
+        return (str.length() - str.replace(symbol, "").length()) / symbol.length();
     }
 
     private static char p_upperChar(char c) {
