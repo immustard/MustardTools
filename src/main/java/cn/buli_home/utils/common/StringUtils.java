@@ -463,7 +463,7 @@ public class StringUtils {
      * @param str    待匹配字符串
      * @param symbol 指定字符串
      */
-    private static int specifiedSymbolCount(String str, String symbol) {
+    public static int specifiedSymbolCount(String str, String symbol) {
         return (str.length() - str.replace(symbol, "").length()) / symbol.length();
     }
 
