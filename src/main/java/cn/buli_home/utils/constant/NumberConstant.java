@@ -1,27 +1,29 @@
 package cn.buli_home.utils.constant;
 
-public interface NumberConstant {
+public final class NumberConstant {
 
     /** 一 */
-    Integer ONE = 1;
+    public static Integer ONE = 1;
     /** 十 */
-    Integer TEN = 10;
+    public static Integer TEN = 10;
     /** 百 */
-    Integer HUNDRED = 100;
+    public static Integer HUNDRED = 100;
     /** 千 */
-    Integer THOUSAND = 1000;
+    public static Integer THOUSAND = 1000;
 
     /** 万 */
-    Integer TEN_THOUSAND = 1_0000;
+    public static Integer TEN_THOUSAND = 1_0000;
     /** 十万 */
-    Integer HUNDRED_THOUSAND = 10_0000;
+    public static Integer HUNDRED_THOUSAND = 10_0000;
     /** 百万 */
-    Integer MILLION = 100_0000;
+    public static Integer MILLION = 100_0000;
     /** 千万 */
-    Integer TEN_MILLION = 1000_0000;
+    public static Integer TEN_MILLION = 1000_0000;
 
     /** 亿 */
-    Integer HUNDRED_MILLION = 1_0000_0000;
+    public static Integer HUNDRED_MILLION = 1_0000_0000;
     /** 十亿 */
-    Integer BILLION = 10_0000_0000;
+    public static Integer BILLION = 10_0000_0000;
+
+    private NumberConstant() {}
 }

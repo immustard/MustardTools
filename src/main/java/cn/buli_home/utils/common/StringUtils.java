@@ -1,5 +1,6 @@
 package cn.buli_home.utils.common;
 
+import cn.buli_home.utils.constant.RegexConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
@@ -339,8 +340,7 @@ public class StringUtils {
      * 是否有特殊字符
      */
     public static boolean hasSpecialChar(String str) {
-        String regEx = "[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
-        Pattern p = Pattern.compile(regEx);
+        Pattern p = Pattern.compile(RegexConstant.SPECIAL_CHAR);
         Matcher m = p.matcher(str);
         return m.find();
     }
