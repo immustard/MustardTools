@@ -219,8 +219,15 @@ public class StringUtils {
 
         String[] split = str.split("_");
         StringBuilder sb = new StringBuilder(str.length());
-        for (String s : split) {
-            sb.append(upperFirst(s));
+        for (int i = 0; i < split.length; i++) {
+            String s = split[i];
+
+            if (i == 0) {
+                sb.append(s);
+            } else {
+                sb.append(upperFirst(s));
+            }
+
         }
         return sb.toString();
     }
