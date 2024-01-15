@@ -220,7 +220,7 @@ public class StringUtils {
         String[] split = str.split("_");
         StringBuilder sb = new StringBuilder(str.length());
         for (String s : split) {
-            sb.append(lowerFirst(s));
+            sb.append(upperFirst(s));
         }
         return sb.toString();
     }
