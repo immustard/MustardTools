@@ -1,5 +1,7 @@
 package cn.buli_home.utils.date;
 
+import lombok.Data;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -765,6 +767,7 @@ public class DateUtils {
         return day + "d" + hour + "h" + min + "m";
     }
 
+    @Data
     static class DateNode {
         /**
          * 年
@@ -822,118 +825,5 @@ public class DateUtils {
          * 显示时间
          */
         private String time;
-
-        public int getYear() {
-            return year;
-        }
-
-        public void setYear(int year) {
-            this.year = year;
-        }
-
-        public int getMonth() {
-            return month;
-        }
-
-        public void setMonth(int month) {
-            this.month = month;
-        }
-
-        public int getDay() {
-            return day;
-        }
-
-        public void setDay(int day) {
-            this.day = day;
-        }
-
-        public int getHour() {
-            return hour;
-        }
-
-        public void setHour(int hour) {
-            this.hour = hour;
-        }
-
-        public int getMinute() {
-            return minute;
-        }
-
-        public void setMinute(int minute) {
-            this.minute = minute;
-        }
-
-        public int getSecond() {
-            return second;
-        }
-
-        public void setSecond(int second) {
-            this.second = second;
-        }
-
-        public int getMillisecond() {
-            return millisecond;
-        }
-
-        public void setMillisecond(int millisecond) {
-            this.millisecond = millisecond;
-        }
-
-        public int getWeek() {
-            return week;
-        }
-
-        public void setWeek(int week) {
-            this.week = week;
-        }
-
-        public int getDayOfYear() {
-            return dayOfYear;
-        }
-
-        public void setDayOfYear(int dayOfYear) {
-            this.dayOfYear = dayOfYear;
-        }
-
-        public int getWeekOfYear() {
-            return weekOfYear;
-        }
-
-        public void setWeekOfYear(int weekOfYear) {
-            this.weekOfYear = weekOfYear;
-        }
-
-        public int getWeekOfYearIgnoreLastYear() {
-            return weekOfYearIgnoreLastYear;
-        }
-
-        public void setWeekOfYearIgnoreLastYear(int weekOfYearIgnoreLastYear) {
-            this.weekOfYearIgnoreLastYear = weekOfYearIgnoreLastYear;
-        }
-
-        public long getSecondStamp() {
-            return secondStamp;
-        }
-
-        public void setSecondStamp(long secondStamp) {
-            this.secondStamp = secondStamp;
-        }
-
-        public long getMillisecondStamp() {
-            return millisecondStamp;
-        }
-
-        public void setMillisecondStamp(long millisecondStamp) {
-            this.millisecondStamp = millisecondStamp;
-        }
-
-        public String getTime() {
-            return time;
-        }
-
-        public void setTime(String time) {
-            this.time = time;
-        }
-
     }
 }

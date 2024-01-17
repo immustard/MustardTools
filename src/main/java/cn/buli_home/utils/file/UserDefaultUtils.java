@@ -1,5 +1,6 @@
 package cn.buli_home.utils.file;
 
+import cn.buli_home.utils.constant.StringConstant;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import cn.buli_home.utils.common.StringUtils;
@@ -109,13 +110,13 @@ public class UserDefaultUtils {
 
     private String p_loadRecordString(String key) throws Exception {
         if (Objects.isNull(key)) {
-            return "";
+            return StringConstant.EMPTY;
         }
 
         String content = FileUtils.readFile(PATH);
         JSONObject jsonObject = JSON.parseObject(content);
 
-        return null == jsonObject ? "" : jsonObject.getString(key);
+        return Objects.isNull(jsonObject) ? StringConstant.EMPTY : jsonObject.getString(key);
     }
 
     private void p_setFilePath(String filePath) {
@@ -125,7 +126,7 @@ public class UserDefaultUtils {
 
         UD_FILE_PATH = filePath;
 
-        if (!filePath.endsWith("\\") && !filePath.endsWith("/")) {
+        if (!filePath.endsWith(StringConstant.BACKSLASH) && !filePath.endsWith("/")) {
             PATH = UD_FILE_PATH + File.separator + UD_FILE_NAME;
         } else {
             PATH = UD_FILE_PATH + UD_FILE_NAME;
@@ -134,7 +135,7 @@ public class UserDefaultUtils {
 
     private void p_clean(String key) {
         try {
-            recordString(key, "");
+            recordString(key, StringConstant.EMPTY);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -142,7 +143,7 @@ public class UserDefaultUtils {
 
     private void p_cleanAll() {
         try {
-            FileUtils.writeFile(PATH, "", FileWriteType.OVERWRITE);
+            FileUtils.writeFile(PATH, StringConstant.EMPTY, FileWriteType.OVERWRITE);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

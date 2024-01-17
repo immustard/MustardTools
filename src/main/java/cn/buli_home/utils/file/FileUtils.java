@@ -1,5 +1,8 @@
 package cn.buli_home.utils.file;
 
+import cn.buli_home.utils.common.StringUtils;
+import cn.buli_home.utils.constant.CharConstant;
+import cn.buli_home.utils.constant.StringConstant;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 
@@ -20,11 +23,6 @@ public class FileUtils {
      * 缓存区大小
      */
     private static final int BUFFER_SIZE = 1024;
-
-    /**
-     * 换行符
-     */
-    private static final String NEWLINE_CONTENT = "\r\n";
 
     /**
      * 文件打开模式
@@ -158,7 +156,7 @@ public class FileUtils {
         // 如果是追加新行, 且文件不为空
         String writeContent = content;
         if (writeType == FileWriteType.APPEND_NEWLINE && channel.size() != 0) {
-            writeContent = NEWLINE_CONTENT.concat(content);
+            writeContent = StringConstant.CRLF.concat(content);
         }
         byte[] bytes = writeContent.getBytes(StandardCharsets.UTF_8);
         ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
@@ -243,7 +241,7 @@ public class FileUtils {
                 // 对于windows下，\r\n这两个字符在一起时，表示一个换行。
                 // 但如果这两个字符分开显示时，会换两次行。
                 // 因此，屏蔽掉\r，或者屏蔽\n。否则，将会多出很多空行。
-                if ((tChar) != '\r') {
+                if ((tChar) != CharConstant.CR) {
                     stringBuilder.append(tChar);
                 }
             }
@@ -286,5 +284,14 @@ public class FileUtils {
         }
 
         return file.renameTo(new File(newPath));
+    }
+
+    /**
+     * 获取文件扩展名 (不带`.`)
+     */
+    public static String extName(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return StringConstant.EMPTY;
+        }
     }
 }

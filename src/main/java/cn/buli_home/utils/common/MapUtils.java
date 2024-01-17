@@ -73,7 +73,8 @@ public class MapUtils {
 
     /**
      * 模型转为字典
-     * @param model 模型
+     *
+     * @param model       模型
      * @param annotations 忽略字段注解
      */
     public static Map<String, Object> model2Map(Object model, Class... annotations) {
@@ -97,7 +98,12 @@ public class MapUtils {
             }
 
             String fieldName = field.getName();
-            if (fieldName.equals("gmtModified") || fieldName.equals("gmtCreate") || fieldName.equals("deleted")) {
+            if (fieldName.equals("gmtModified")
+                    || fieldName.equals("gmtCreate")
+                    || fieldName.equals("deleted")
+                    || fieldName.equals("create_time")
+                    || fieldName.equals("update_time")
+                    || fieldName.equals("valid")) {
                 continue;
             }
 
@@ -112,7 +118,8 @@ public class MapUtils {
             try {
                 method = model.getClass().getMethod(getMethodName);
                 map.put(fieldName, method.invoke(model));
-            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -122,7 +129,8 @@ public class MapUtils {
 
     /**
      * 模型转为字典
-     * @param list 模型列表
+     *
+     * @param list        模型列表
      * @param annotations 忽略字段注解
      */
     public static List<Map<String, Object>> modelList2Map(List<?> list, Class... annotations) {
@@ -134,7 +142,8 @@ public class MapUtils {
 
     /**
      * 检查字典中必有字段是否有值 (默认不去除空白符)
-     * @param map 字典
+     *
+     * @param map  字典
      * @param keys 键数组
      */
     public static Boolean checkValueBlank(Map<String, Object> map, String... keys) {
@@ -143,9 +152,10 @@ public class MapUtils {
 
     /**
      * 检查字典中必有字段是否有值
-     * @param map 字典
+     *
+     * @param map          字典
      * @param isCheckBlank 是否去除空白符
-     * @param keys 键数组
+     * @param keys         键数组
      */
     public static Boolean checkValueBlank(Map<String, Object> map, Boolean isCheckBlank, String... keys) {
         for (String key : keys) {

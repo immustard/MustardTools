@@ -1,5 +1,7 @@
 package cn.buli_home.utils.file;
 
+import cn.buli_home.utils.constant.StringConstant;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +26,7 @@ public class CommonFileUtils {
             //当前日期时间方法 string类型
             SimpleDateFormat tempDate = new SimpleDateFormat("yyyyMMdd");
             String datetime = tempDate.format(new java.util.Date());
-            path = path + "_" + datetime;
+            path = path + StringConstant.UNDERLINE + datetime;
         }
 
         if (!canExtend) {
@@ -37,7 +39,7 @@ public class CommonFileUtils {
         if (exists) {
             int idx = 1;
             while (exists) {
-                oPath = Paths.get(path + "_" + idx + ".txt");
+                oPath = Paths.get(path + StringConstant.UNDERLINE + idx + ".txt");
                 exists = Files.exists(oPath);
                 idx += 1;
             }

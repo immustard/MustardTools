@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 实体工具类
@@ -24,7 +25,7 @@ public class EntityUtils {
      * @param annotation 必有字段注解
      */
     public static boolean checkRequiredField(Object model, Class annotation) {
-        if (null == model || null == annotation) {
+        if (Objects.isNull(model) || Objects.isNull(annotation)) {
             return false;
         }
 
@@ -44,7 +45,7 @@ public class EntityUtils {
             }
 
             Annotation ann = field.getAnnotation(annotation);
-            if (null == ann) { continue; }
+            if (Objects.isNull(ann)) { continue; }
 
             String fieldName = field.getName();
             String getMethodName = p_getMethodName(fieldName);
@@ -63,7 +64,7 @@ public class EntityUtils {
     }
 
     private static String p_getMethodName(String name) {
-        if (name != null && name.length() > 1) {
+        if (Objects.nonNull(name) && name.length() > 1) {
             return "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         return name;
