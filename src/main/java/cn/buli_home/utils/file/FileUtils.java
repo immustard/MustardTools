@@ -30,6 +30,20 @@ public class FileUtils {
     private static final String FILE_OPEN_MODE = "rw";
 
     /**
+     * 类Unix路径分隔符
+     */
+    public static final char UNIX_SEPARATOR = CharConstant.SLASH;
+    /**
+     * Windows路径分隔符
+     */
+    public static final char WINDOWS_SEPARATOR = CharConstant.BACKSLASH;
+
+    /**
+     * 特殊后缀
+     */
+    private static final CharSequence[] SPECIAL_SUFFIX = {"tar.bz2", "tar.Z", "tar.gz", "tar.xz"};
+
+    /**
      * 按行读取文件
      */
     public static List<Tuple2<Integer, String>> readFileByLine(File file) throws Exception {
@@ -301,12 +315,12 @@ public class FileUtils {
 
         int secondToLastIndex = fileName.substring(0, idx).lastIndexOf(StringConstant.DOT);
         String subStr = fileName.substring(secondToLastIndex == -1 ? idx : secondToLastIndex + 1);
-        if (StrUtil.containsAny(subStr, SPECIAL_SUFFIX)) {
+        if (StringUtils.containsAny(subStr, SPECIAL_SUFFIX)) {
             return subStr;
         }
 
         final String ext = fileName.substring(idx + 1);
         // 扩展名中不能包含路径相关的符号
-        return StrUtil.containsAny(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? StrUtil.EMPTY : ext;
+        return StringUtils.containsAnyChar(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? StringConstant.EMPTY : ext;
     }
 }
