@@ -293,5 +293,20 @@ public class FileUtils {
         if (StringUtils.isEmpty(fileName)) {
             return StringConstant.EMPTY;
         }
+
+        int idx = fileName.lastIndexOf(StringConstant.DOT);
+        if (idx < 0) {
+            return StringConstant.EMPTY;
+        }
+
+        int secondToLastIndex = fileName.substring(0, idx).lastIndexOf(StringConstant.DOT);
+        String subStr = fileName.substring(secondToLastIndex == -1 ? idx : secondToLastIndex + 1);
+        if (StrUtil.containsAny(subStr, SPECIAL_SUFFIX)) {
+            return subStr;
+        }
+
+        final String ext = fileName.substring(idx + 1);
+        // 扩展名中不能包含路径相关的符号
+        return StrUtil.containsAny(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? StrUtil.EMPTY : ext;
     }
 }

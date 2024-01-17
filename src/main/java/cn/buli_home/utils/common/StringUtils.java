@@ -410,6 +410,18 @@ public class StringUtils {
         return "";
     }
 
+    public static Boolean containsAnyChar(String str, char... chars) {
+        if (!isEmpty(str)) {
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                if (ArrayUtil.contains(testChars, str.charAt(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * 字符串是否包含该正则
      *
