@@ -36,8 +36,8 @@ public class StringUtils {
     /**
      * 去空白符
      */
-    public static String replaceBlank(String str) {
-        return replace(str, "\\s*|\t|\r|\n|&nbsp;");
+    public static String replaceBlank(CharSequence str) {
+        return replace(str.toString(), "\\s*|\t|\r|\n|&nbsp;");
     }
 
     /**
@@ -271,6 +271,7 @@ public class StringUtils {
     /**
      * 解析成 Integer
      */
+    @Deprecated
     public static Integer parseInt(String str) {
         String tmpStr = convert2String(str);
 
@@ -290,6 +291,7 @@ public class StringUtils {
     /**
      * 解析成 Long
      */
+    @Deprecated
     public static Long parseLong(String str) {
         String tmpStr = convert2String(str);
 
@@ -309,6 +311,7 @@ public class StringUtils {
     /**
      * 解析成 Double
      */
+    @Deprecated
     public static Double parseDouble(String str) {
         String tmpStr = convert2String(str);
 
@@ -681,6 +684,42 @@ public class StringUtils {
      */
     public static int specifiedSymbolCount(String str, String symbol) {
         return (str.length() - str.replace(symbol, StringConstant.EMPTY).length()) / symbol.length();
+    }
+
+    /**
+     * 是否以指定字符串开头
+     * 如果给定的字符串和开头字符串都为null则返回true，否则任意一个值为null返回false
+     *
+     * @param str            待匹配字符串
+     * @param prefix         开头
+     * @param isIgnoreCase   是否忽略大小写
+     * @param isIgnoreEquals 是否忽略字符串相等的情况
+     */
+    public static boolean startWith(CharSequence str, CharSequence prefix, boolean isIgnoreCase, boolean isIgnoreEquals) {
+        if (Objects.isNull(str) || Objects.isNull(prefix)) {
+            return !isIgnoreEquals;
+        }
+
+        String s = str.toString();
+        String p = prefix.toString();
+
+        boolean isStartWith = s.regionMatches(isIgnoreCase, 0, p, 0, prefix.length());
+
+        if (isStartWith) {
+            return !isIgnoreEquals || s.equalsIgnoreCase(p);
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否以指定字符串开头，忽略大小写
+     *
+     * @param str    被监测字符串
+     * @param prefix 开头字符串
+     */
+    public static boolean startWithIgnoreCase(CharSequence str, CharSequence prefix) {
+        return startWith(str, prefix, true, false);
     }
 
     private static char p_upperChar(char c) {

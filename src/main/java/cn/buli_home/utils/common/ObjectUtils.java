@@ -13,16 +13,16 @@ import static cn.buli_home.utils.common.StringUtils.*;
  */
 public class ObjectUtils {
     public static int parseInt(Object obj) {
-        return StringUtils.parseInt(convert2String(obj));
+        return NumberUtils.parseInt(convert2String(obj));
     }
 
 
     public static long parseLong(Object obj) {
-        return StringUtils.parseLong(convert2String(obj));
+        return NumberUtils.parseLong(convert2String(obj));
     }
 
     public static Double parseDouble(Object obj) {
-        return StringUtils.parseDouble(convert2String(obj));
+        return NumberUtils.parseDouble(convert2String(obj));
     }
 
     public static boolean parseBoolean(Object obj) {

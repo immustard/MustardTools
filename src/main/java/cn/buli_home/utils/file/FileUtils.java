@@ -323,4 +323,19 @@ public class FileUtils {
         // 扩展名中不能包含路径相关的符号
         return StringUtils.containsAnyChar(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? StringConstant.EMPTY : ext;
     }
+
+    /**
+     * 获取文件扩展名 (不带`.`)
+     */
+    public static String extName(File file) {
+        if (Objects.isNull(file)) {
+            return null;
+        }
+
+        if (file.isDirectory()){
+            return null;
+        }
+
+        return extName(file.getName());
+    }
 }

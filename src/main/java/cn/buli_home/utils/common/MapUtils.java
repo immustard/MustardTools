@@ -16,6 +16,14 @@ import java.util.stream.Collectors;
  * Create by 2022/9/26
  */
 public class MapUtils {
+
+    /**
+     * 是否为空
+     */
+    public static boolean isEmpty(Map<?, ?> map) {
+        return Objects.isNull(map) || map.isEmpty();
+    }
+
     /**
      * 获取字符串value
      */
