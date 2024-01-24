@@ -9,7 +9,7 @@ import java.util.Objects;
  * {@link InputStream} 向 {@link OutputStream} 拷贝
  *
  * @author looly
- * @since 5.7.8
+ * 
  */
 public class StreamCopier extends IoCopier<InputStream, OutputStream> {
 

@@ -24,7 +24,7 @@ public class NumberUtils {
      *
      * @param number 被检查类型
      * @return 检查结果，非数字类型和Null将返回false
-     * @since 4.6.7
+     * 
      */
     public static boolean isValidNumber(Number number) {
         if (null == number) {
@@ -44,7 +44,7 @@ public class NumberUtils {
      *
      * @param number 被检查double
      * @return 检查结果
-     * @since 5.7.0
+     * 
      */
     public static boolean isValid(double number) {
         return !(Double.isNaN(number) || Double.isInfinite(number));
@@ -56,7 +56,7 @@ public class NumberUtils {
      *
      * @param number 被检查double
      * @return 检查结果
-     * @since 5.7.0
+     * 
      */
     public static boolean isValid(float number) {
         return !(Float.isNaN(number) || Float.isInfinite(number));
@@ -70,7 +70,7 @@ public class NumberUtils {
      * @param num1 数字1
      * @param num2 数字2
      * @return 是否相等
-     * @since 5.4.2
+     * 
      */
     public static boolean equals(double num1, double num2) {
         return Double.doubleToLongBits(num1) == Double.doubleToLongBits(num2);
@@ -84,7 +84,7 @@ public class NumberUtils {
      * @param num1 数字1
      * @param num2 数字2
      * @return 是否相等
-     * @since 5.4.5
+     * 
      */
     public static boolean equals(float num1, float num2) {
         return Float.floatToIntBits(num1) == Float.floatToIntBits(num2);
@@ -97,7 +97,7 @@ public class NumberUtils {
      * @param num1 数字1
      * @param num2 数字2
      * @return 是否相等
-     * @since 5.7.19
+     * 
      */
     public static boolean equals(long num1, long num2) {
         return num1 == num2;
@@ -118,7 +118,7 @@ public class NumberUtils {
      * @param number2 数字2
      * @return 是否相等
      * @see Objects#equals(Object, Object)
-     * @since 5.8.17
+     * 
      */
     public static boolean equals(final Number number1, final Number number2) {
         if (number1 instanceof BigDecimal && number2 instanceof BigDecimal) {
@@ -196,7 +196,7 @@ public class NumberUtils {
      * @param number 数字值
      * @param scale  保留小数位数
      * @return 新值
-     * @since 4.1.0
+     * 
      */
     public static BigDecimal round(BigDecimal number, int scale) {
         return round(number, scale, RoundingMode.HALF_UP);
@@ -210,7 +210,7 @@ public class NumberUtils {
      * @param numberStr 数字值的字符串表现形式
      * @param scale     保留小数位数
      * @return 新值
-     * @since 3.2.2
+     * 
      */
     public static String roundStr(String numberStr, int scale) {
         return round(numberStr, scale).toPlainString();
@@ -237,7 +237,7 @@ public class NumberUtils {
      * @param scale        保留小数位数
      * @param roundingMode 保留小数的模式 {@link RoundingMode}
      * @return 新值
-     * @since 3.2.2
+     * 
      */
     public static String roundStr(double v, int scale, RoundingMode roundingMode) {
         return round(v, scale, roundingMode).toPlainString();
@@ -293,7 +293,7 @@ public class NumberUtils {
      * @param scale        保留小数位数
      * @param roundingMode 保留小数的模式 {@link RoundingMode}
      * @return 新值
-     * @since 3.2.2
+     * 
      */
     public static String roundStr(String numberStr, int scale, RoundingMode roundingMode) {
         return round(numberStr, scale, roundingMode).toPlainString();
@@ -317,7 +317,7 @@ public class NumberUtils {
      * @param number 需要科学计算的数据
      * @param scale  保留的小数位
      * @return 结果
-     * @since 4.1.0
+     * 
      */
     public static BigDecimal roundHalfEven(Number number, int scale) {
         return roundHalfEven(toBigDecimal(number), scale);
@@ -341,7 +341,7 @@ public class NumberUtils {
      * @param value 需要科学计算的数据
      * @param scale 保留的小数位
      * @return 结果
-     * @since 4.1.0
+     * 
      */
     public static BigDecimal roundHalfEven(BigDecimal value, int scale) {
         return round(value, scale, RoundingMode.HALF_EVEN);
@@ -353,7 +353,7 @@ public class NumberUtils {
      * @param number 需要科学计算的数据
      * @param scale  保留的小数位
      * @return 结果
-     * @since 4.1.0
+     * 
      */
     public static BigDecimal roundDown(Number number, int scale) {
         return roundDown(toBigDecimal(number), scale);
@@ -365,7 +365,7 @@ public class NumberUtils {
      * @param value 需要科学计算的数据
      * @param scale 保留的小数位
      * @return 结果
-     * @since 4.1.0
+     * 
      */
     public static BigDecimal roundDown(BigDecimal value, int scale) {
         return round(value, scale, RoundingMode.DOWN);
@@ -378,7 +378,7 @@ public class NumberUtils {
      *
      * @param number 数字
      * @return {@link BigDecimal}
-     * @since 4.0.9
+     * 
      */
     public static BigDecimal toBigDecimal(Number number) {
         if (null == number) {
@@ -408,7 +408,7 @@ public class NumberUtils {
      *
      * @param numberStr 数字字符串
      * @return {@link BigDecimal}
-     * @since 4.0.9
+     * 
      */
     public static BigDecimal toBigDecimal(String numberStr) {
         if (StringUtils.isEmpty(numberStr)) {
@@ -432,7 +432,7 @@ public class NumberUtils {
      *
      * @param number 数字
      * @return {@link BigInteger}
-     * @since 5.4.5
+     * 
      */
     public static BigInteger toBigInteger(Number number) {
         if (null == number) {
@@ -458,7 +458,7 @@ public class NumberUtils {
      *
      * @param number 数字字符串
      * @return {@link BigInteger}
-     * @since 5.4.5
+     * 
      */
     public static BigInteger toBigInteger(String number) {
         return StringUtils.isEmpty(number) ? BigInteger.ZERO : new BigInteger(number);
@@ -479,7 +479,7 @@ public class NumberUtils {
      * @param number 数字，支持0x开头、0开头和普通十进制
      * @return int
      * @throws NumberFormatException 数字格式异常
-     * @since 4.1.4
+     * 
      */
     public static int parseInt(String number) throws NumberFormatException {
         if (StringUtils.isEmpty(number)) {
@@ -517,7 +517,7 @@ public class NumberUtils {
      *
      * @param number 数字，支持0x开头、0开头和普通十进制
      * @return long
-     * @since 4.1.4
+     * 
      */
     public static long parseLong(String number) {
         if (StringUtils.isEmpty(number)) {
@@ -548,7 +548,7 @@ public class NumberUtils {
      *
      * @param number 数字，支持0x开头、0开头和普通十进制
      * @return long
-     * @since 5.5.5
+     * 
      */
     public static float parseFloat(String number) {
         if (StringUtils.isEmpty(number)) {
@@ -574,7 +574,7 @@ public class NumberUtils {
      *
      * @param number 数字，支持0x开头、0开头和普通十进制
      * @return long
-     * @since 5.5.5
+     * 
      */
     public static double parseDouble(String number) {
         if (StringUtils.isEmpty(number)) {
@@ -601,7 +601,7 @@ public class NumberUtils {
      * @param numberStr Number字符串
      * @return Number对象
      * @throws NumberFormatException 包装了{@link ParseException}，当给定的数字字符串无法解析时抛出
-     * @since 4.1.15
+     * 
      */
     public static Number parseNumber(String numberStr) throws NumberFormatException {
         if (numberStr.startsWith("0x") || numberStr.startsWith("0X")) {

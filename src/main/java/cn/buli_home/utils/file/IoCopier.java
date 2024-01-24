@@ -7,7 +7,7 @@ package cn.buli_home.utils.file;
  * @param <S> 拷贝源类型，如InputStream、Reader等
  * @param <T> 拷贝目标类型，如OutputStream、Writer等
  * @author looly
- * @since 5.7.8
+ * 
  */
 public abstract class IoCopier<S, T> {
 
@@ -57,7 +57,7 @@ public abstract class IoCopier<S, T> {
      *
      * @param flushEveryBuffer 是否每次写出一个buffer内容就执行flush
      * @return this
-     * @since 5.7.18
+     * 
      */
     public IoCopier<S, T> setFlushEveryBuffer(boolean flushEveryBuffer) {
         this.flushEveryBuffer = flushEveryBuffer;

@@ -121,6 +121,68 @@ public class StringUtils {
     }
 
     /**
+     * 替换指定字符串的指定区间内字符为指定字符串，字符串只重复一次<br>
+     * 此方法使用{@link String#codePoints()}完成拆分替换
+     *
+     * @param str          字符串
+     * @param startInclude 开始位置（包含）
+     * @param endExclude   结束位置（不包含）
+     * @param replacedStr  被替换的字符串
+     * @return 替换后的字符串
+     */
+    public static String replace(CharSequence str, int startInclude, int endExclude, CharSequence replacedStr) {
+        if (isEmpty(str)) {
+            return convert2String(str);
+        }
+        final String originalStr = convert2String(str);
+        int[] strCodePoints = originalStr.codePoints().toArray();
+        final int strLength = strCodePoints.length;
+        if (startInclude > strLength) {
+            return originalStr;
+        }
+        if (endExclude > strLength) {
+            endExclude = strLength;
+        }
+        if (startInclude > endExclude) {
+            // 如果起始位置大于结束位置，不替换
+            return originalStr;
+        }
+
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < startInclude; i++) {
+            stringBuilder.append(new String(strCodePoints, i, 1));
+        }
+        stringBuilder.append(replacedStr);
+        for (int i = endExclude; i < strLength; i++) {
+            stringBuilder.append(new String(strCodePoints, i, 1));
+        }
+        return stringBuilder.toString();
+    }
+    
+    /**
+     * 替换指定字符串的指定区间内字符为"*"
+     * 俗称：脱敏功能，后面其他功能，可以见：DesensitizedUtil(脱敏工具类)
+     *
+     * <pre>
+     * CharSequenceUtil.hide(null,*,*)=null
+     * CharSequenceUtil.hide("",0,*)=""
+     * CharSequenceUtil.hide("jackduan@163.com",-1,4)   ****duan@163.com
+     * CharSequenceUtil.hide("jackduan@163.com",2,3)    ja*kduan@163.com
+     * CharSequenceUtil.hide("jackduan@163.com",3,2)    jackduan@163.com
+     * CharSequenceUtil.hide("jackduan@163.com",16,16)  jackduan@163.com
+     * CharSequenceUtil.hide("jackduan@163.com",16,17)  jackduan@163.com
+     * </pre>
+     *
+     * @param str          字符串
+     * @param startInclude 开始位置（包含）
+     * @param endExclude   结束位置（不包含）
+     * @return 替换后的字符串
+     */
+    public static String hide(CharSequence str, int startInclude, int endExclude) {
+        return replace(str, startInclude, endExclude, "*");
+    }
+    
+    /**
      * 将 Object 转换为 String
      * null或<null> (不区分大小写), 认定为空
      */
@@ -596,7 +658,7 @@ public class StringUtils {
      * @param str      指定字符串
      * @param testStrs 需要检查的字符串数组
      * @return 是否包含任意一个字符串
-     * @since 3.2.0
+     * 
      */
     public static boolean containsAny(CharSequence str, CharSequence... testStrs) {
         return null != getContainsStr(str, testStrs);
@@ -608,7 +670,7 @@ public class StringUtils {
      * @param str      指定字符串
      * @param testStrs 需要检查的字符串数组
      * @return 被包含的第一个字符串
-     * @since 3.2.0
+     * 
      */
     public static String getContainsStr(CharSequence str, CharSequence... testStrs) {
         if (isEmpty(str) || ArrayUtils.isEmpty(testStrs)) {

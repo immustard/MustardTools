@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 
 import static cn.buli_home.utils.date.DateConstant.*;
@@ -712,6 +713,94 @@ public class DateUtils {
     }
 
     /**
+     * 生日转为年龄，计算法定年龄
+     *
+     * @param birthDay 生日，标准日期字符串
+     * @return 年龄
+     */
+    public static int ageOfNow(String birthDay, String formatStyle) {
+        return ageOfNow(parse(birthDay, formatStyle));
+    }
+
+    /**
+     * 生日转为年龄，计算法定年龄
+     *
+     * @param birthDay 生日
+     * @return 年龄
+     */
+    public static int ageOfNow(Date birthDay) {
+        return age(birthDay, new Date());
+    }
+
+    /**
+     * 计算相对于dateToCompare的年龄，常用于计算指定生日在某年的年龄
+     *
+     * @param birthday      生日
+     * @param dateToCompare 需要对比的日期
+     * @return 年龄
+     */
+    public static int age(Date birthday, Date dateToCompare) {
+        if (Objects.isNull(birthday)) {
+            return -1;
+        }
+
+        if (null == dateToCompare) {
+            dateToCompare = new Date();
+        }
+
+        return age(birthday.getTime(), dateToCompare.getTime());
+    }
+
+    /**
+     * 计算相对于dateToCompare的年龄，常用于计算指定生日在某年的年龄<br>
+     * 按照《最高人民法院关于审理未成年人刑事案件具体应用法律若干问题的解释》第二条规定刑法第十七条规定的“周岁”，按照公历的年、月、日计算，从周岁生日的第二天起算。
+     * <ul>
+     *     <li>2022-03-01出生，则相对2023-03-01，周岁为0，相对于2023-03-02才是1岁。</li>
+     *     <li>1999-02-28出生，则相对2000-02-29，周岁为1</li>
+     * </ul>
+     *
+     * @param birthday      生日
+     * @param dateToCompare 需要对比的日期
+     * @return 年龄
+     */
+    protected static int age(long birthday, long dateToCompare) {
+        if (birthday > dateToCompare) {
+            throw new IllegalArgumentException("Birthday is after dateToCompare!");
+        }
+
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(dateToCompare);
+
+        final int year = cal.get(Calendar.YEAR);
+        final int month = cal.get(Calendar.MONTH);
+        final int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+        // 复用cal
+        cal.setTimeInMillis(birthday);
+        int age = year - cal.get(Calendar.YEAR);
+
+        //当前日期，则为0岁
+        if (age == 0){
+            return 0;
+        }
+
+        final int monthBirth = cal.get(Calendar.MONTH);
+        if (month == monthBirth) {
+            final int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+            // issue#I6E6ZG，法定生日当天不算年龄，从第二天开始计算
+            if (dayOfMonth <= dayOfMonthBirth) {
+                // 如果生日在当月，但是未达到生日当天的日期，年龄减一
+                age--;
+            }
+        } else if (month < monthBirth) {
+            // 如果当前月份未达到生日的月份，年龄计算减一
+            age--;
+        }
+
+        return age;
+    }
+
+    /**
      * List<Date> 转 List<String>
      *
      * @param dates 日期集合
@@ -768,7 +857,7 @@ public class DateUtils {
     }
 
     @Data
-    static class DateNode {
+    public static class DateNode {
         /**
          * 年
          */

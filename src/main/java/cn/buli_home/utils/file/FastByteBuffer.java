@@ -5,7 +5,7 @@ package cn.buli_home.utils.file;
  * 快速缓冲，将数据存放在缓冲集中，取代以往的单一数组
  *
  * @author biezhi, looly
- * @since 1.0
+ * 
  */
 public class FastByteBuffer {
 
