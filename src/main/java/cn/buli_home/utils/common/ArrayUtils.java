@@ -49,8 +49,6 @@ public class ArrayUtils extends BasicArrayUtils {
         return true;
     }
 
-    // ---------------------------------------------------------------------- isNotEmpty
-
     /**
      * 数组是否为非空
      *

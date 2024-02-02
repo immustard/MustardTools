@@ -1,12 +1,15 @@
 package cn.buli_home.test;
 
+import cn.buli_home.utils.common.StringFormatter;
 import cn.buli_home.utils.file.FileUtils;
+import cn.buli_home.utils.thread.ThreadUtils;
 import io.vavr.Tuple2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author mustard
@@ -18,15 +21,9 @@ public class Test {
     private static final Logger log = LogManager.getLogger(Test.class);
 
     public static void main(String[] args) {
-        System.out.println("start");
-        try {
-            List<Tuple2<Integer, String>> list = FileUtils.readFileByLine(new File("/Users/mustard/Downloads/test-2023-03-30.txt"));
-
-            for (Tuple2<Integer, String> tuple : list) {
-                System.out.println("第 " + tuple._1 + " 行: " + tuple._2);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        ExecutorService executor = ThreadUtils.newFixedExecutor(9,"mustard",true);
+        for (int i = 0; i < 1000; i++) {
+            executor.execute(() -> System.out.println(Thread.currentThread()));
         }
     }
 }
