@@ -32,6 +32,8 @@ public class HttpRequest {
 
     private Map<String, String> bodyParameter;
 
+    private boolean ignoreSSL;
+
     /**
      * 添加请求头 (键值对)
      * @param key 键

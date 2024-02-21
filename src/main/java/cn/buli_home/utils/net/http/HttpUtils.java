@@ -24,12 +24,16 @@ public class HttpUtils {
 
     private static final Logger log = LogManager.getLogger(HttpUtils.class);
 
-    private static OkHttpClient httpClient = new OkHttpClient.Builder()
+    private static OkHttpClient httpClient = new OkHttpClient.Builder().build();
+
+    private static OkHttpClient sslHttpClient = new OkHttpClient.Builder()
+            .sslSocketFactory(HttpClientConfig.sslSocketFactory(), HttpClientConfig.x509TrustManager())
+            .hostnameVerifier(HttpClientConfig.hostnameVerifier())
             .build();
-    
+
     private static List<Interceptor> interceptorList = new ArrayList<>();
     private static List<Interceptor> networkInterceptorList = new ArrayList<>();
-    
+
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_GENERAL = MediaType.parse("application/octet-stream");
     private static final MediaType MEDIA_TYPE_IMAGE = MediaType.parse("image/png");
@@ -103,18 +107,30 @@ public class HttpUtils {
      */
     public static void buildClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder sslBuilder = new OkHttpClient.Builder()
+                .sslSocketFactory(HttpClientConfig.sslSocketFactory(), HttpClientConfig.x509TrustManager())
+                .hostnameVerifier(HttpClientConfig.hostnameVerifier());
 
-        interceptorList.forEach(builder::addInterceptor);
-        networkInterceptorList.forEach(builder::addNetworkInterceptor);
+        interceptorList.forEach(interceptor -> {
+            builder.addInterceptor(interceptor);
+            sslBuilder.addInterceptor(interceptor);
+        });
+        networkInterceptorList.forEach(interceptor -> {
+            builder.addNetworkInterceptor(interceptor);
+            sslBuilder.addNetworkInterceptor(interceptor);
+        });
 
         httpClient = builder.build();
+        sslHttpClient = sslBuilder.build();
 
         log.info("\uD83D\uDC4C\uD83D\uDC4C\uD83D\uDC4C okHttp build client finished: " + interceptorList.size() + "interceptors, " + networkInterceptorList.size() + "networkInterceptors");
     }
 
     // 请求底层方法
     private static HttpResponse p_request(HttpRequest httpRequest, Request request) {
-        Call call = httpClient.newCall(request);
+        Call call = httpRequest.isIgnoreSSL()
+                ? sslHttpClient.newCall(request)
+                : httpClient.newCall(request);
 
         switch (httpRequest.getRequestMode()) {
             // 同步
@@ -152,7 +168,7 @@ public class HttpUtils {
 
         httpResponse.setHttpRequest(httpRequest);
         httpResponse.setCode(response.code());
-        httpResponse.setSuccess(response.code()/100 == 2);
+        httpResponse.setSuccess(response.code() / 100 == 2);
 
         try {
             String string = StringUtils.convert2String(response.body().string());
