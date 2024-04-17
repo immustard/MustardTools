@@ -1,14 +1,8 @@
 package cn.buli_home.test;
 
-import cn.buli_home.utils.common.StringFormatter;
-import cn.buli_home.utils.file.FileUtils;
 import cn.buli_home.utils.thread.ThreadUtils;
-import io.vavr.Tuple2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -17,11 +11,11 @@ import java.util.concurrent.ExecutorService;
  * Create by 2023-03-30
  */
 
+@Slf4j
 public class Test {
-    private static final Logger log = LogManager.getLogger(Test.class);
 
     public static void main(String[] args) {
-        ExecutorService executor = ThreadUtils.newFixedExecutor(9,"mustard",true);
+        ExecutorService executor = ThreadUtils.newFixedExecutor(9, "mustard", true);
         for (int i = 0; i < 1000; i++) {
             executor.execute(() -> System.out.println(Thread.currentThread()));
         }
