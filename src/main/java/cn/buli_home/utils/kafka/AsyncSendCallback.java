@@ -1,24 +1,22 @@
 package cn.buli_home.utils.kafka;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+@Slf4j
 public class AsyncSendCallback implements Callback {
-
-    private final static Logger log = LogManager.getLogger(AsyncSendCallback.class);
 
     public boolean isLog = true;
 
     @Override
     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
         if (e != null) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         if (null != recordMetadata && isLog) {
-            log.info("返回结果: topic->" + recordMetadata.topic() + ", partition->" + recordMetadata.partition() +  ", offset->" + recordMetadata.offset());
+            log.info("返回结果: topic->{}, partition->{}, offset->{}", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
         }
     }
 }

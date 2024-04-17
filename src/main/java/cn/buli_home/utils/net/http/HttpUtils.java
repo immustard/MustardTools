@@ -2,9 +2,8 @@ package cn.buli_home.utils.net.http;
 
 import cn.buli_home.utils.common.StringUtils;
 import com.alibaba.fastjson2.JSON;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +19,8 @@ import java.util.stream.Stream;
  * @version 1.0
  * Create by 2022/9/14
  */
+@Slf4j
 public class HttpUtils {
-
-    private static final Logger log = LogManager.getLogger(HttpUtils.class);
 
     private static OkHttpClient httpClient = new OkHttpClient.Builder().build();
 

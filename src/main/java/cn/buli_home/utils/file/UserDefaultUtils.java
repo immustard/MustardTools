@@ -1,11 +1,10 @@
 package cn.buli_home.utils.file;
 
+import cn.buli_home.utils.common.StringUtils;
 import cn.buli_home.utils.constant.StringConstant;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import cn.buli_home.utils.common.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,64 +19,65 @@ import java.util.Objects;
  * @version 1.0
  * Create by 2022/9/18
  */
+@Slf4j
 public class UserDefaultUtils {
 
-    protected final Logger log = LogManager.getLogger(this.getClass());
+    private final static String UD_FILE_NAME = "UserDefault.txt";
 
-    private final String UD_FILE_NAME = "UserDefault.txt";
+    private static String UD_FILE_PATH = FileConstant.USER_DEFAULT_PATH;
 
-    private String UD_FILE_PATH = FileConstant.USER_DEFAULT_PATH;
-
-    private String PATH = UD_FILE_PATH + UD_FILE_NAME;
+    private static String PATH = UD_FILE_PATH + UD_FILE_NAME;
 
     /**
      * 记录内容
      */
     public static void recordString(String key, String value) throws Exception {
-        getInstance().p_recordString(key, value);
+        p_recordString(key, value);
     }
 
     /**
      * 记录内容
      */
     public static void record(Map<String, String> map) throws Exception {
-        getInstance().p_record(map);
+        p_record(map);
     }
 
     /**
      * 读取文件内容
      */
     public static String loadRecordString(String key) throws Exception {
-        return getInstance().p_loadRecordString(key);
+        return p_loadRecordString(key);
     }
 
     /**
      * 设置文件路径
+     *
      * @param filePath
      */
     public static void setFilePath(String filePath) {
-        getInstance().p_setFilePath(filePath);
+        p_setFilePath(filePath);
     }
 
     /**
      * 清除键值对
+     *
      * @param key 键
      */
     public static void clean(String key) {
-        getInstance().p_clean(key);
+        p_clean(key);
     }
 
     /**
      * 清除所有值
      */
     public static void cleanAll() {
-        getInstance().p_cleanAll();
+        p_cleanAll();
     }
 
     /**
      * 持久化字符串
      */
-    private void p_recordString(String key, String value) throws Exception {
+    private static void p_recordString(String key, String value) throws Exception {
         if (Objects.isNull(key)) {
             return;
         }
@@ -91,7 +91,7 @@ public class UserDefaultUtils {
     /**
      * 持久化字符串 (键值对)
      */
-    private void p_record(Map<String, String> map) throws Exception {
+    private static void p_record(Map<String, String> map) throws Exception {
         if (Objects.isNull(map)) {
             return;
         }
@@ -108,7 +108,7 @@ public class UserDefaultUtils {
         FileUtils.writeFile(PATH, jsonObject.toJSONString(), FileWriteType.OVERWRITE);
     }
 
-    private String p_loadRecordString(String key) throws Exception {
+    private static String p_loadRecordString(String key) throws Exception {
         if (Objects.isNull(key)) {
             return StringConstant.EMPTY;
         }
@@ -119,7 +119,7 @@ public class UserDefaultUtils {
         return Objects.isNull(jsonObject) ? StringConstant.EMPTY : jsonObject.getString(key);
     }
 
-    private void p_setFilePath(String filePath) {
+    private static void p_setFilePath(String filePath) {
         if (StringUtils.isEmpty(filePath)) {
             return;
         }
@@ -133,7 +133,7 @@ public class UserDefaultUtils {
         }
     }
 
-    private void p_clean(String key) {
+    private static void p_clean(String key) {
         try {
             recordString(key, StringConstant.EMPTY);
         } catch (Exception e) {
@@ -141,28 +141,11 @@ public class UserDefaultUtils {
         }
     }
 
-    private void p_cleanAll() {
+    private static void p_cleanAll() {
         try {
             FileUtils.writeFile(PATH, StringConstant.EMPTY, FileWriteType.OVERWRITE);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-    }
-
-
-    private static volatile UserDefaultUtils INSTANCE = null;
-
-    private UserDefaultUtils() {
-    }
-
-    private static UserDefaultUtils getInstance() {
-        if (null == INSTANCE) {
-            synchronized (UserDefaultUtils.class) {
-                if (null == INSTANCE) {
-                    INSTANCE = new UserDefaultUtils();
-                }
-            }
-        }
-        return INSTANCE;
     }
 }
