@@ -186,17 +186,6 @@ public class StringUtils {
 
     /**
      * 替换指定字符串的指定区间内字符为"*"
-     * 俗称：脱敏功能，后面其他功能，可以见：DesensitizedUtil(脱敏工具类)
-     *
-     * <pre>
-     * CharSequenceUtil.hide(null,*,*)=null
-     * CharSequenceUtil.hide("",0,*)=""
-     * CharSequenceUtil.hide("jackduan@163.com",-1,4)   ****duan@163.com
-     * CharSequenceUtil.hide("jackduan@163.com",2,3)    ja*kduan@163.com
-     * CharSequenceUtil.hide("jackduan@163.com",3,2)    jackduan@163.com
-     * CharSequenceUtil.hide("jackduan@163.com",16,16)  jackduan@163.com
-     * CharSequenceUtil.hide("jackduan@163.com",16,17)  jackduan@163.com
-     * </pre>
      *
      * @param str          字符串
      * @param startInclude 开始位置（包含）
@@ -204,7 +193,13 @@ public class StringUtils {
      * @return 替换后的字符串
      */
     public static String hide(CharSequence str, int startInclude, int endExclude) {
-        return replace(str, startInclude, endExclude, "*");
+        int replaceCnt = Math.max(endExclude - startInclude, 1);
+        replaceCnt = Math.min(replaceCnt, str.length() - startInclude);
+        StringBuilder replaceStr = new StringBuilder();
+        for (int i = 0; i < replaceCnt; i++) {
+            replaceStr.append("*");
+        }
+        return replace(str, startInclude, endExclude, replaceStr);
     }
 
     /**
@@ -238,8 +233,8 @@ public class StringUtils {
      * 大写第一个字母
      */
     public static String upperFirst(String str) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(str)) {
-            return org.apache.commons.lang3.StringUtils.EMPTY;
+        if (isEmpty(str)) {
+            return StringConstant.EMPTY;
         }
 
         char[] chars = str.toCharArray();
@@ -262,8 +257,8 @@ public class StringUtils {
      * 小写第一个字母
      */
     public static String lowerFirst(String str) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(str)) {
-            return org.apache.commons.lang3.StringUtils.EMPTY;
+        if (isEmpty(str)) {
+            return StringConstant.EMPTY;
         }
 
         char[] chars = str.toCharArray();
@@ -286,8 +281,8 @@ public class StringUtils {
      * 驼峰转下划线
      */
     public static String camel2Underline(String str) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(str)) {
-            return org.apache.commons.lang3.StringUtils.EMPTY;
+        if (isEmpty(str)) {
+            return StringConstant.EMPTY;
         }
 
         StringBuilder buf = new StringBuilder();
@@ -310,8 +305,8 @@ public class StringUtils {
      * 下划线转驼峰
      */
     public static String underline2Camel(String str) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(str)) {
-            return org.apache.commons.lang3.StringUtils.EMPTY;
+        if (isEmpty(str)) {
+            return StringConstant.EMPTY;
         }
 
         String[] split = str.split("_");
