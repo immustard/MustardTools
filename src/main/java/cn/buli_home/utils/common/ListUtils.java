@@ -1,10 +1,7 @@
 package cn.buli_home.utils.common;
 
-import org.ehcache.shadow.org.terracotta.context.query.Matcher;
-
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
 
 public class ListUtils {
 
@@ -306,29 +303,6 @@ public class ListUtils {
             result.add(list.get(i));
         }
         return result;
-    }
-
-    /**
-     * 获取匹配规则定义中匹配到元素的最后位置<br>
-     * 此方法对于某些无序集合的位置信息，以转换为数组后的位置为准。
-     *
-     * @param <T>     元素类型
-     * @param list    List集合
-     * @param matcher 匹配器，为空则全部匹配
-     * @return 最后一个位置
-     */
-    public static <T> int lastIndexOf(List<T> list, Matcher<T> matcher) {
-        if (null != list) {
-            final int size = list.size();
-            if (size > 0) {
-                for (int i = size - 1; i >= 0; i--) {
-                    if (null == matcher || matcher.matches(list.get(i))) {
-                        return i;
-                    }
-                }
-            }
-        }
-        return -1;
     }
 
     /**
