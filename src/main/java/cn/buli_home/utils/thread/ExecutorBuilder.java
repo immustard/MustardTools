@@ -1,7 +1,7 @@
 package cn.buli_home.utils.thread;
 
 import cn.buli_home.utils.common.ObjectUtils;
-import javafx.util.Builder;
+import org.apache.commons.lang3.builder.Builder;
 
 import java.io.Serializable;
 import java.util.concurrent.*;
