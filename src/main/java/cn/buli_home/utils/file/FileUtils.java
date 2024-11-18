@@ -332,10 +332,69 @@ public class FileUtils {
             return null;
         }
 
-        if (file.isDirectory()){
+        if (file.isDirectory()) {
             return null;
         }
 
         return extName(file.getName());
+    }
+
+    /**
+     * 遍历文件夹
+     *
+     * @param folder    文件夹
+     * @param depth     遍历深度: -1 表示无限
+     * @param extRegex  文件扩展名匹配规则: null 表示不过滤
+     * @param returnDir 是否返回文件夹
+     */
+    public static List<File> traverseFolder(String folder, int depth, String extRegex, boolean returnDir) {
+        File file = new File(folder);
+
+        return traverseFolder(file, depth, extRegex, returnDir);
+    }
+
+    /**
+     * 遍历文件夹
+     *
+     * @param folder    文件夹
+     * @param depth     遍历深度: -1 表示无限
+     * @param extRegex  文件扩展名匹配规则: null 表示不过滤
+     * @param returnDir 是否返回文件夹
+     */
+    public static List<File> traverseFolder(File folder, int depth, String extRegex, boolean returnDir) {
+        List<File> result = new ArrayList<>();
+        if (depth == 0) {
+            //直接返回空的list
+            return result;
+        }
+        //防止主函数调用时给出路径不是一个有效的目录
+        if (folder.listFiles() == null) {
+            System.out.println("这不是一个有效的目录");
+            //直接返回空的list
+            return result;
+        }
+
+        for (File item : Objects.requireNonNull(folder.listFiles())) {
+            if (item.isDirectory()) {
+                if (returnDir) {
+                    result.add(item);
+                }
+                result.addAll(traverseFolder(item, depth - 1, extRegex, returnDir));
+            } else {
+                if (!returnDir && item.isDirectory()) {
+                    continue;
+                }
+
+                if (!StringUtils.isEmpty(extRegex)) {
+                    String extName = extName(item);
+                    if (Objects.nonNull(extName) && extName.equalsIgnoreCase(extRegex)) {
+                        result.add(item);
+                    }
+                } else {
+                    result.add(item);
+                }
+            }
+        }
+        return result;
     }
 }
